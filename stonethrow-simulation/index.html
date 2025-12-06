@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stone Thrown Vertically - Physics Animation</title>
+    <meta name="description" content="Stone reaches 500m in 10s, calculate time to fall back">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🪨 Stone Thrown Vertically</h1>
+            <p class="subtitle">Stone reaches 500m max height in 10s | Find time to fall back</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="sky-gradient"></div>
+                    <div class="height-markers" id="height-markers"></div>
+                    <div class="max-height-line">
+                        <span class="max-label">500m (Max Height)</span>
+                    </div>
+                    <div class="stone" id="stone">
+                        <div class="stone-trail" id="stone-trail"></div>
+                    </div>
+                    <div class="ground">
+                        <div class="grass"></div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="play-btn" class="control-btn primary">
+                        <span class="icon">▶</span> Start
+                    </button>
+                    <button id="pause-btn" class="control-btn" disabled>
+                        <span class="icon">⏸</span> Pause
+                    </button>
+                    <button id="reset-btn" class="control-btn">
+                        <span class="icon">↺</span> Reset
+                    </button>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline-panel">
+                    <div class="timeline-bar">
+                        <div class="timeline-progress" id="timeline-progress"></div>
+                        <div class="timeline-marker" style="left: 0%">
+                            <span>Throw</span>
+                            <span class="time">0s</span>
+                        </div>
+                        <div class="timeline-marker" style="left: 50%">
+                            <span>Max</span>
+                            <span class="time">10s</span>
+                        </div>
+                        <div class="timeline-marker" style="left: 100%">
+                            <span>Ground</span>
+                            <span class="time">~20s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Data Display -->
+                <div class="data-panel">
+                    <h3>📊 Live Data</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Height</span>
+                            <span class="data-value" id="height-value">0 m</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Velocity</span>
+                            <span class="data-value" id="velocity-value">98 m/s</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Time</span>
+                            <span class="data-value" id="time-value">0.0 s</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Phase</span>
+                            <span class="data-value phase" id="phase-value">Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Box -->
+                <div class="question-box">
+                    <h3>📋 Question</h3>
+                    <p>A stone is thrown vertically from the ground. It reaches <strong>maximum height of 500m</strong>
+                        in <strong>10 seconds</strong>.</p>
+                    <p class="question-highlight">After what time will it reach the ground from the maximum height?</p>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">5 s</button>
+                        <button class="quiz-option" data-answer="correct">10 s</button>
+                        <button class="quiz-option" data-answer="wrong">15 s</button>
+                        <button class="quiz-option" data-answer="wrong">20 s</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">Time to fall =</span>
+                        <span class="result-value">≈ 10 seconds</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Physics Calculations -->
+                <div class="calc-panel">
+                    <h3>📊 Physics Calculations</h3>
+                    <div class="calc-steps">
+                        <div class="calc-step">
+                            <span class="step-num">1</span>
+                            <span>At max height, v = 0: u = g×t = 9.8×10 = <strong>98 m/s</strong></span>
+                        </div>
+                        <div class="calc-step">
+                            <span class="step-num">2</span>
+                            <span>Time to fall: h = ½gt² → 500 = ½×9.8×t²</span>
+                        </div>
+                        <div class="calc-step highlight">
+                            <span class="step-num">3</span>
+                            <span>t = √(1000/9.8) = √102.04 ≈ <strong>10.1 seconds</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="insight-panel">
+                    <h3>💡 Key Insight</h3>
+                    <p><strong>Symmetry of Free Fall:</strong></p>
+                    <p>Time to rise = Time to fall (when air resistance is negligible)</p>
+                    <div class="insight-formula">
+                        t_fall = t_rise = 10s
+                    </div>
+                </div>
+
+                <!-- Total Journey -->
+                <div class="journey-panel">
+                    <h3>🛤️ Total Journey</h3>
+                    <div class="journey-stats">
+                        <div class="journey-item">
+                            <span>Rise Time:</span>
+                            <span>10 s</span>
+                        </div>
+                        <div class="journey-item">
+                            <span>Fall Time:</span>
+                            <span>≈10.1 s</span>
+                        </div>
+                        <div class="journey-item total">
+                            <span>Total Time:</span>
+                            <span>≈20.1 s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Stone Thrown Vertically | Answer: Time to fall ≈ 10 seconds</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
