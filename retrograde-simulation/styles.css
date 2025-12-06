@@ -1,0 +1,561 @@
+/* ===== CSS Reset & Variables ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Space Theme Colors */
+    --bg-primary: #0a0a1a;
+    --bg-dark: #050510;
+    --bg-panel: rgba(10, 10, 26, 0.95);
+    --accent-gold: #ffd700;
+    --accent-cyan: #00d4ff;
+    --accent-green: #00e676;
+    --accent-orange: #ff9800;
+    --earth-color: #4a90e2;
+    --satellite-color: #ff6b6b;
+    --text-primary: #ffffff;
+    --text-secondary: #a8c5e2;
+    --text-muted: #6b8bab;
+    --border-color: rgba(0, 212, 255, 0.2);
+
+    /* Typography */
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+}
+
+/* ===== Base Styles ===== */
+body {
+    font-family: var(--font-main);
+    background: radial-gradient(ellipse at center, #0a0a2e 0%, #050510 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* ===== App Container ===== */
+.app-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Header ===== */
+.header {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+    margin-bottom: var(--spacing-md);
+    position: relative;
+}
+
+.menu-btn {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all var(--transition-fast);
+}
+
+.menu-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-cyan);
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--satellite-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-xs);
+}
+
+.header .subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* ===== Main Content Grid ===== */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    grid-template-rows: auto auto;
+    gap: var(--spacing-lg);
+    flex: 1;
+}
+
+/* ===== Orbit View ===== */
+.orbit-view {
+    position: relative;
+    background: radial-gradient(ellipse at center, #0a0a2e 0%, #050510 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    min-height: 520px;
+}
+
+/* Star background */
+.orbit-view::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(2px 2px at 20px 30px, white, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, white, transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(1px 1px at 160px 120px, white, transparent);
+    background-repeat: repeat;
+    background-size: 200px 200px;
+    opacity: 0.5;
+    animation: twinkle 4s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+
+    0%,
+    100% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+#orbit-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+.orbit-labels {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    z-index: 2;
+}
+
+.orbit-labels .label {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+}
+
+.time-panel {
+    position: absolute;
+    bottom: var(--spacing-md);
+    left: var(--spacing-md);
+    background: rgba(0, 0, 0, 0.8);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    display: flex;
+    gap: var(--spacing-lg);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    z-index: 2;
+}
+
+/* ===== Right Panel ===== */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* ===== Panel Styles ===== */
+.problem-box,
+.control-panel,
+.velocity-dashboard,
+.result-box,
+.derivation-panel,
+.quiz-panel,
+.insight-panel {
+    background: var(--bg-panel);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+    backdrop-filter: blur(10px);
+}
+
+.problem-box h3,
+.control-panel h3,
+.velocity-dashboard h3,
+.result-box h3,
+.derivation-panel h3,
+.quiz-panel h3,
+.insight-panel h3 {
+    font-size: 0.85rem;
+    color: var(--accent-gold);
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Problem Box */
+.problem-box p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.problem-box .question {
+    color: var(--accent-cyan);
+    font-weight: 500;
+    margin-top: var(--spacing-sm);
+}
+
+/* ===== Control Panel ===== */
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.control-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-cyan);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-btn.primary {
+    background: linear-gradient(135deg, var(--accent-green), #69f0ae);
+    border-color: transparent;
+    color: #000;
+}
+
+.control-btn.highlight {
+    background: linear-gradient(135deg, var(--accent-orange), #ffc107);
+    border-color: transparent;
+    color: #000;
+}
+
+/* Speed Controls */
+.speed-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.speed-group label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.speed-buttons {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.speed-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.speed-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.speed-btn.active {
+    background: var(--accent-cyan);
+    border-color: var(--accent-cyan);
+    color: #000;
+}
+
+/* ===== Velocity Dashboard ===== */
+.vel-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+.vel-row.earth {
+    background: rgba(74, 144, 226, 0.15);
+    border-left: 3px solid var(--earth-color);
+}
+
+.vel-row.satellite {
+    background: rgba(255, 107, 107, 0.15);
+    border-left: 3px solid var(--satellite-color);
+}
+
+.vel-row.relative {
+    background: rgba(255, 215, 0, 0.15);
+    border-left: 3px solid var(--accent-gold);
+}
+
+.vel-icon {
+    font-size: 1.2rem;
+}
+
+.vel-data {
+    display: flex;
+    flex-direction: column;
+}
+
+.vel-name {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.vel-value {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+/* ===== Result Box ===== */
+.result-box {
+    background: rgba(0, 230, 118, 0.1);
+    border-color: var(--accent-green);
+}
+
+.result-display {
+    display: flex;
+    align-items: baseline;
+    gap: var(--spacing-sm);
+    justify-content: center;
+}
+
+.result-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.result-value {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-green);
+}
+
+.result-note {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* ===== Bottom Panel ===== */
+.bottom-panel {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr 0.8fr;
+    gap: var(--spacing-md);
+}
+
+/* Derivation Panel */
+.derivation-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+}
+
+.step.highlight {
+    background: rgba(0, 230, 118, 0.15);
+    border: 1px solid var(--accent-green);
+}
+
+.step-num {
+    width: 20px;
+    height: 20px;
+    background: var(--accent-cyan);
+    color: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.derivation-panel .note {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: rgba(255, 152, 0, 0.1);
+    border: 1px solid var(--accent-orange);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    color: var(--accent-orange);
+}
+
+/* Quiz Panel */
+.quiz-panel>p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xs);
+}
+
+.quiz-option {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.quiz-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.quiz-option.correct {
+    background: rgba(0, 230, 118, 0.2);
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+.quiz-option.wrong {
+    background: rgba(255, 107, 107, 0.2);
+    border-color: var(--satellite-color);
+    color: var(--satellite-color);
+}
+
+.quiz-feedback {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    display: none;
+}
+
+.quiz-feedback.show {
+    display: block;
+}
+
+.quiz-feedback.correct {
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+}
+
+.quiz-feedback.wrong {
+    background: rgba(255, 107, 107, 0.1);
+    border: 1px solid var(--satellite-color);
+    color: var(--satellite-color);
+}
+
+/* Insight Panel */
+.insight-content p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.insight-formula {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: var(--accent-gold);
+    text-align: center;
+    padding: var(--spacing-sm);
+    background: rgba(255, 215, 0, 0.1);
+    border-radius: var(--radius-sm);
+    margin-top: var(--spacing-sm);
+}
+
+/* ===== Footer ===== */
+.footer {
+    text-align: center;
+    padding: var(--spacing-md) 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+
+    .bottom-panel {
+        grid-column: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .orbit-view {
+        min-height: 400px;
+    }
+}

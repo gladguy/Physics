@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free-Fall Storey Problem</title>
+    <meta name="description" content="Interactive simulation of a ball falling through a 16-storey building">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🏢 Free-Fall Storey Problem</h1>
+            <p class="subtitle">Ball Dropped from 16th Storey - Time: 4 seconds</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Building View -->
+            <div class="building-view">
+                <canvas id="building-canvas"></canvas>
+                <div class="time-overlay" id="time-overlay">
+                    <span class="time-label">t = </span>
+                    <span class="time-value" id="time-display">0.00</span>
+                    <span class="time-unit">s</span>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>A ball is dropped from the <strong>16th storey</strong> of a building.</p>
+                    <p>It takes <strong>4 seconds</strong> to reach the ground.</p>
+                    <p class="question">How many storeys does it pass in the <strong>last second (3-4s)</strong>?</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="last-second-btn" class="control-btn highlight">
+                            <span class="icon">⏱</span> Jump to 3s
+                        </button>
+                    </div>
+
+                    <div class="speed-group">
+                        <label>Speed:</label>
+                        <div class="speed-buttons">
+                            <button class="speed-btn" data-speed="0.25">0.25×</button>
+                            <button class="speed-btn" data-speed="0.5">0.5×</button>
+                            <button class="speed-btn active" data-speed="1">1×</button>
+                            <button class="speed-btn" data-speed="2">2×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Data -->
+                <div class="data-panel">
+                    <h3>📊 Live Data</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Current Floor:</span>
+                            <span class="data-value" id="current-floor">16</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Storeys Fallen:</span>
+                            <span class="data-value" id="storeys-fallen">0</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Velocity:</span>
+                            <span class="data-value" id="velocity">0 m/s</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Distance:</span>
+                            <span class="data-value" id="distance">0 m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interval Analysis -->
+                <div class="interval-panel" id="interval-panel">
+                    <h3>⏱ Storeys per Second</h3>
+                    <div class="interval-grid">
+                        <div class="interval-item" data-interval="1">
+                            <span class="interval-label">1st second (0-1s)</span>
+                            <span class="interval-value" id="interval-1">—</span>
+                        </div>
+                        <div class="interval-item" data-interval="2">
+                            <span class="interval-label">2nd second (1-2s)</span>
+                            <span class="interval-value" id="interval-2">—</span>
+                        </div>
+                        <div class="interval-item" data-interval="3">
+                            <span class="interval-label">3rd second (2-3s)</span>
+                            <span class="interval-value" id="interval-3">—</span>
+                        </div>
+                        <div class="interval-item highlight" data-interval="4">
+                            <span class="interval-label">4th/Last second (3-4s)</span>
+                            <span class="interval-value" id="interval-4">—</span>
+                        </div>
+                    </div>
+                    <div class="pattern-display">
+                        <span>Pattern:</span>
+                        <span class="pattern-values">1 : 3 : 5 : <strong>7</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="derivation-panel" id="derivation-panel">
+                    <h3>📐 Mathematical Analysis</h3>
+                    <div class="derivation-steps">
+                        <div class="deriv-step" data-step="1">
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <div class="step-title">Total Height</div>
+                                <div class="step-formula">\[ h = \frac{1}{2}gt^2 = \frac{1}{2}(10)(4)^2 = 80\text{ m} \]
+                                </div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="2">
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <div class="step-title">Height per Storey</div>
+                                <div class="step-formula">\[ h_{storey} = \frac{80}{16} = 5\text{ m/storey} \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="3">
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <div class="step-title">Distance in nth Second</div>
+                                <div class="step-formula">\[ d_n = \frac{1}{2}g(2n-1) = 5(2n-1) \text{ m} \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step highlight" data-step="4">
+                            <span class="step-num">4</span>
+                            <div class="step-content">
+                                <div class="step-title">4th Second (Last Second)</div>
+                                <div class="step-formula">\[ d_4 = 5(2 \times 4 - 1) = 5 \times 7 = 35\text{ m} =
+                                    \boxed{7 \text{ storeys}} \]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>How many storeys in the last second?</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">A) 3</button>
+                        <button class="quiz-option" data-answer="wrong">B) 4</button>
+                        <button class="quiz-option" data-answer="wrong">C) 5</button>
+                        <button class="quiz-option" data-answer="correct">D) 7</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Distance Table -->
+                <div class="table-panel">
+                    <h3>📋 Distance Summary</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Distance</th>
+                                <th>Storeys</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>t = 1s</td>
+                                <td>5 m</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>t = 2s</td>
+                                <td>20 m</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>t = 3s</td>
+                                <td>45 m</td>
+                                <td>9</td>
+                            </tr>
+                            <tr class="highlight">
+                                <td>t = 4s</td>
+                                <td>80 m</td>
+                                <td>16</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Free-Fall Storey Simulation | Physics Education Tool</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

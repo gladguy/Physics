@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falling Stones - Velocity Ratio</title>
+    <meta name="description" content="Interactive simulation: Two stones falling from heights in ratio 2:3">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🪨 Falling Stones - Velocity Ratio</h1>
+            <p class="subtitle">Heights h₁:h₂ = 2:3 | Find v₁:v₂</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Canvas -->
+            <div class="fall-view">
+                <canvas id="fall-canvas"></canvas>
+                <div class="time-overlay">
+                    <span class="time-label">Time:</span>
+                    <span class="time-value" id="time-display">0.00</span>
+                    <span class="time-unit">s</span>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>Two stones are dropped from heights in ratio <strong>h₁:h₂ = 2:3</strong>.</p>
+                    <p class="question">Find the ratio of their <strong>final velocities</strong> upon reaching ground.
+                    </p>
+                    <p class="given">Given: g = 10 m/s², h₁ = 20m, h₂ = 30m</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="derive-btn" class="control-btn highlight">
+                            <span class="icon">📐</span> Derive
+                        </button>
+                    </div>
+
+                    <div class="speed-group">
+                        <label>Speed:</label>
+                        <div class="speed-buttons">
+                            <button class="speed-btn" data-speed="0.25">0.25×</button>
+                            <button class="speed-btn active" data-speed="0.5">0.5×</button>
+                            <button class="speed-btn" data-speed="1">1×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stones Dashboard -->
+                <div class="stones-dashboard">
+                    <h3>📊 Stone Data</h3>
+
+                    <div class="stone-panel stone1">
+                        <div class="stone-header">
+                            <span class="stone-dot blue"></span>
+                            Stone 1 (h₁ = 20m)
+                        </div>
+                        <div class="stone-data">
+                            <div class="data-row">
+                                <span>Height:</span>
+                                <span id="h1-current">20.00 m</span>
+                            </div>
+                            <div class="data-row">
+                                <span>Velocity:</span>
+                                <span id="v1-current">0.00 m/s</span>
+                            </div>
+                            <div class="data-row final">
+                                <span>Final v₁:</span>
+                                <span id="v1-final">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stone-panel stone2">
+                        <div class="stone-header">
+                            <span class="stone-dot red"></span>
+                            Stone 2 (h₂ = 30m)
+                        </div>
+                        <div class="stone-data">
+                            <div class="data-row">
+                                <span>Height:</span>
+                                <span id="h2-current">30.00 m</span>
+                            </div>
+                            <div class="data-row">
+                                <span>Velocity:</span>
+                                <span id="v2-current">0.00 m/s</span>
+                            </div>
+                            <div class="data-row final">
+                                <span>Final v₂:</span>
+                                <span id="v2-final">—</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Velocity Ratio -->
+                    <div class="ratio-box">
+                        <span class="ratio-label">v₁ : v₂ =</span>
+                        <span class="ratio-value" id="velocity-ratio">? : ?</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="derivation-panel" id="derivation-panel">
+                    <h3>📐 Mathematical Derivation</h3>
+                    <div class="derivation-steps">
+                        <div class="deriv-step" data-step="1">
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <div class="step-title">Energy Conservation</div>
+                                <div class="step-formula">\[ mgh = \frac{1}{2}mv^2 \implies v^2 = 2gh \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="2">
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <div class="step-title">Velocity Formula</div>
+                                <div class="step-formula">\[ v = \sqrt{2gh} \implies v \propto \sqrt{h} \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="3">
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <div class="step-title">Apply Height Ratio</div>
+                                <div class="step-formula">\[ \frac{v_1}{v_2} = \sqrt{\frac{h_1}{h_2}} =
+                                    \sqrt{\frac{2}{3}} \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step highlight" data-step="4">
+                            <span class="step-num">4</span>
+                            <div class="step-content">
+                                <div class="step-title">Final Ratio</div>
+                                <div class="step-formula">\[ v_1 : v_2 = \sqrt{2} : \sqrt{3} \implies \boxed{v_2 : v_1 =
+                                    \sqrt{3} : \sqrt{2}} \]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>What is v₂:v₁ (larger height stone : smaller height stone)?</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="correct">A) √3:√2</button>
+                        <button class="quiz-option" data-answer="wrong">B) √3:√3</button>
+                        <button class="quiz-option" data-answer="wrong">C) 2:3</button>
+                        <button class="quiz-option" data-answer="wrong">D) 3:2</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Graph -->
+                <div class="graph-panel">
+                    <h3>📈 v vs √h Graph</h3>
+                    <canvas id="graph-canvas" width="280" height="180"></canvas>
+                    <div class="graph-info">Linear relationship: v ∝ √h</div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Falling Stones Simulation | v₁:v₂ = √2:√3 (v₂:v₁ = √3:√2)</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

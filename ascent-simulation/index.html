@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last 't' Seconds of Ascent</title>
+    <meta name="description" content="Distance covered during last t seconds of upward motion">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🚀 Last 't' Seconds of Ascent</h1>
+            <p class="subtitle">Ball thrown upward with speed u | Find distance in last t seconds</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Canvas -->
+            <div class="motion-view">
+                <canvas id="motion-canvas"></canvas>
+                <div class="time-overlay">
+                    <span class="time-label">Time:</span>
+                    <span class="time-value" id="time-display">0.00</span>
+                    <span class="time-unit">s</span>
+                </div>
+                <div class="phase-indicator" id="phase-indicator">Ascending</div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>A ball is thrown <strong>vertically upward</strong> with initial speed u.</p>
+                    <p class="question">Find the distance covered during the <strong>last 't' seconds</strong> before
+                        reaching maximum height.</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="symmetry-btn" class="control-btn highlight">
+                            <span class="icon">⇆</span> Show Symmetry
+                        </button>
+                    </div>
+
+                    <div class="speed-group">
+                        <label>Speed:</label>
+                        <div class="speed-buttons">
+                            <button class="speed-btn" data-speed="0.25">0.25×</button>
+                            <button class="speed-btn active" data-speed="0.5">0.5×</button>
+                            <button class="speed-btn" data-speed="1">1×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parameters -->
+                <div class="params-panel">
+                    <h3>⚙️ Parameters</h3>
+                    <div class="param-row">
+                        <span class="param-label">Initial speed u:</span>
+                        <span class="param-value" id="u-value">20 m/s</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">Gravity g:</span>
+                        <span class="param-value" id="g-value">10 m/s²</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">Last t seconds:</span>
+                        <span class="param-value highlight" id="t-last-value">1 s</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">Total ascent time T:</span>
+                        <span class="param-value" id="T-value">2 s</span>
+                    </div>
+                    <div class="param-row">
+                        <span class="param-label">Max height:</span>
+                        <span class="param-value" id="h-max-value">20 m</span>
+                    </div>
+                </div>
+
+                <!-- Distance Result -->
+                <div class="result-box">
+                    <h3>📏 Distance in Last t Seconds</h3>
+                    <div class="result-display">
+                        <span class="result-label">s =</span>
+                        <span class="result-value" id="distance-result">½gt² = ?</span>
+                    </div>
+                    <div class="result-calculation" id="result-calc">
+                        ½ × 10 × 1² = <strong>5 m</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="derivation-panel" id="derivation-panel">
+                    <h3>📐 Mathematical Derivation</h3>
+                    <div class="derivation-steps">
+                        <div class="deriv-step" data-step="1">
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <div class="step-title">Symmetry Principle</div>
+                                <div class="step-formula">Last t seconds of ascent = First t seconds of descent</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="2">
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <div class="step-title">Descent from Rest</div>
+                                <div class="step-formula">At max height, v = 0 (starts falling from rest)</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="3">
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <div class="step-title">Free Fall Distance</div>
+                                <div class="step-formula">\[ s = \frac{1}{2}gt^2 \] (from rest, u=0)</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step highlight" data-step="4">
+                            <span class="step-num">4</span>
+                            <div class="step-content">
+                                <div class="step-title">Answer</div>
+                                <div class="step-formula">\[ \boxed{s = \frac{1}{2}gt^2} \] (independent of u!)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>Distance during last 't' seconds of ascent:</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">A) ut - ½gt²</button>
+                        <button class="quiz-option" data-answer="correct">B) ½gt²</button>
+                        <button class="quiz-option" data-answer="wrong">C) ut</button>
+                        <button class="quiz-option" data-answer="wrong">D) (u+g)t</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Symmetry Visual -->
+                <div class="symmetry-panel">
+                    <h3>⇆ Symmetry View</h3>
+                    <canvas id="symmetry-canvas" width="260" height="180"></canvas>
+                    <div class="symmetry-labels">
+                        <span class="label ascent">Last t ↑</span>
+                        <span class="label equal">=</span>
+                        <span class="label descent">First t ↓</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Last t Seconds Simulation | Answer: ½gt² (independent of initial speed!)</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

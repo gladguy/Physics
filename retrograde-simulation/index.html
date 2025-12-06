@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retrograde Satellite - Angular Velocity</title>
+    <meta name="description" content="Calculate angular velocity of retrograde satellite seen every 6 hours">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🛰️ Retrograde Satellite</h1>
+            <p class="subtitle">Satellite seen every 6h over equator | Opposite to Earth rotation</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Canvas -->
+            <div class="orbit-view">
+                <canvas id="orbit-canvas"></canvas>
+                <div class="orbit-labels">
+                    <div class="label earth-label">🌍 Earth</div>
+                    <div class="label sat-label">🛰️ Satellite</div>
+                </div>
+                <div class="time-panel">
+                    <span>Time: <span id="time-value">0.0</span> hours</span>
+                    <span>Sightings: <span id="sighting-count">0</span></span>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>A satellite over the equator is seen <strong>every 6 hours</strong>.</p>
+                    <p>It rotates <strong>opposite</strong> to Earth's direction (retrograde).</p>
+                    <p class="question">Find the angular velocity of the satellite.</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="fast-btn" class="control-btn highlight">
+                            <span class="icon">⏩</span> Fast (6h)
+                        </button>
+                    </div>
+
+                    <div class="speed-group">
+                        <label>Speed:</label>
+                        <div class="speed-buttons">
+                            <button class="speed-btn" data-speed="1">1×</button>
+                            <button class="speed-btn active" data-speed="2">2×</button>
+                            <button class="speed-btn" data-speed="5">5×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Angular Velocity Dashboard -->
+                <div class="velocity-dashboard">
+                    <h3>⚡ Angular Velocities</h3>
+                    <div class="vel-row earth">
+                        <div class="vel-icon">🌍</div>
+                        <div class="vel-data">
+                            <span class="vel-name">Earth (Eastward)</span>
+                            <span class="vel-value">ω = π/12 rad/h</span>
+                        </div>
+                    </div>
+                    <div class="vel-row satellite">
+                        <div class="vel-icon">🛰️</div>
+                        <div class="vel-data">
+                            <span class="vel-name">Satellite (Westward)</span>
+                            <span class="vel-value" id="sat-omega">ω = ? rad/h</span>
+                        </div>
+                    </div>
+                    <div class="vel-row relative">
+                        <div class="vel-icon">↔️</div>
+                        <div class="vel-data">
+                            <span class="vel-name">Relative (Both add)</span>
+                            <span class="vel-value">ω = π/3 rad/h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">ω_satellite =</span>
+                        <span class="result-value" id="result-omega">π/4 rad/hour</span>
+                    </div>
+                    <div class="result-note">= 45°/hour</div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="derivation-panel">
+                    <h3>📊 Derivation</h3>
+                    <div class="derivation-steps">
+                        <div class="step">
+                            <span class="step-num">1</span>
+                            <span>Earth: ω_E = 2π/24 = <strong>π/12</strong> rad/h</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">2</span>
+                            <span>Seen every 6h: ω_rel = 2π/6 = <strong>π/3</strong> rad/h</span>
+                        </div>
+                        <div class="step">
+                            <span class="step-num">3</span>
+                            <span>Retrograde: ω_rel = ω_sat + ω_E</span>
+                        </div>
+                        <div class="step highlight">
+                            <span class="step-num">4</span>
+                            <span>ω_sat = π/3 - π/12 = <strong>π/4</strong> rad/h</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>Angular velocity of satellite:</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">π/2 rad/h</button>
+                        <button class="quiz-option" data-answer="wrong">π/3 rad/h</button>
+                        <button class="quiz-option" data-answer="correct">π/4 rad/h</button>
+                        <button class="quiz-option" data-answer="wrong">π/8 rad/h</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="insight-panel">
+                    <h3>💡 Key Insight</h3>
+                    <div class="insight-content">
+                        <p><strong>Retrograde Motion:</strong></p>
+                        <p>When satellite and Earth rotate in <em>opposite</em> directions, their angular speeds
+                            <strong>add</strong> for relative motion.
+                        </p>
+                        <div class="insight-formula">
+                            ω_relative = ω_sat + ω_Earth
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Retrograde Satellite Simulation | Answer: ω = π/4 rad/hour</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

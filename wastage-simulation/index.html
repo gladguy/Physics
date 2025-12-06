@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Wastage Percentage</title>
+    <meta name="description" content="Calculate percentage of energy wasted when throwing brick to 10m with v=6m/s">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🧱 Energy Wastage Percentage</h1>
+            <p class="subtitle">Brick reaches 10m with v = 6 m/s | Find % energy wasted</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Canvas -->
+            <div class="scene-view">
+                <canvas id="scene-canvas"></canvas>
+                <div class="height-markers">
+                    <div class="marker" id="max-marker">11.8m</div>
+                    <div class="marker" id="target-marker">10m</div>
+                    <div class="marker" id="ground-marker">0m</div>
+                </div>
+                <div class="live-data">
+                    <span>h = <span id="height-display">0.0</span>m</span>
+                    <span>v = <span id="velocity-display">14.1</span>m/s</span>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>Mason throws bricks to height <strong>h = 10m</strong>.</p>
+                    <p>At 10m, brick still has velocity <strong>v = 6 m/s</strong> (upward).</p>
+                    <p class="question">Find the <strong>percentage of energy wasted</strong>.</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="analyze-btn" class="control-btn highlight">
+                            <span class="icon">📊</span> Analyze
+                        </button>
+                    </div>
+
+                    <div class="speed-group">
+                        <label>Speed:</label>
+                        <div class="speed-buttons">
+                            <button class="speed-btn" data-speed="0.25">0.25×</button>
+                            <button class="speed-btn active" data-speed="0.5">0.5×</button>
+                            <button class="speed-btn" data-speed="1">1×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Energy Dashboard -->
+                <div class="energy-dashboard">
+                    <h3>⚡ Energy at 10m</h3>
+                    <div class="energy-row">
+                        <span class="energy-label">KE = ½mv²</span>
+                        <span class="energy-value ke" id="ke-value">18m J</span>
+                    </div>
+                    <div class="energy-row">
+                        <span class="energy-label">PE = mgh</span>
+                        <span class="energy-value pe" id="pe-value">100m J</span>
+                    </div>
+                    <div class="energy-row total">
+                        <span class="energy-label">Total</span>
+                        <span class="energy-value" id="total-value">118m J</span>
+                    </div>
+                    <hr>
+                    <div class="energy-row ideal">
+                        <span class="energy-label">Ideal (v=0)</span>
+                        <span class="energy-value" id="ideal-value">100m J</span>
+                    </div>
+                    <div class="energy-row wasted">
+                        <span class="energy-label">Wasted</span>
+                        <span class="energy-value" id="wasted-value">18m J</span>
+                    </div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Wastage Percentage</h3>
+                    <div class="result-formula">
+                        \[ \frac{\text{Wasted}}{\text{Total}} = \frac{18m}{118m} \]
+                    </div>
+                    <div class="result-display">
+                        <span class="result-value" id="percentage-result">≈ 15.25%</span>
+                    </div>
+                    <div class="result-note">Answer: <strong>≈ 15%</strong></div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Energy Bars -->
+                <div class="bars-panel">
+                    <h3>📊 Energy Comparison</h3>
+                    <div class="energy-bars">
+                        <div class="bar-group">
+                            <div class="bar-label">Actual (118m)</div>
+                            <div class="bar actual">
+                                <div class="bar-segment useful" style="width: 84.7%">
+                                    <span>PE: 100m</span>
+                                </div>
+                                <div class="bar-segment wasted" style="width: 15.3%">
+                                    <span>KE: 18m</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-group">
+                            <div class="bar-label">Ideal (100m)</div>
+                            <div class="bar ideal">
+                                <div class="bar-segment useful" style="width: 100%">
+                                    <span>PE: 100m</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wastage-indicator">
+                        <span class="wastage-label">15.3% wasted</span>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>Percentage of energy wasted:</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="correct">A) 15%</button>
+                        <button class="quiz-option" data-answer="wrong">B) 18%</button>
+                        <button class="quiz-option" data-answer="wrong">C) 220%</button>
+                        <button class="quiz-option" data-answer="wrong">D) 36%</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- What-if Panel -->
+                <div class="whatif-panel">
+                    <h3>🔮 If Brick Continues</h3>
+                    <div class="whatif-content">
+                        <p>From v=6m/s at 10m:</p>
+                        <div class="whatif-calc">
+                            <span>Additional height = v²/2g</span>
+                            <span>= 36/20 = <strong>1.8m</strong></span>
+                        </div>
+                        <div class="whatif-result">
+                            Max height = 10 + 1.8 = <strong>11.8m</strong>
+                        </div>
+                        <p class="whatif-note">The extra 1.8m represents wasted energy!</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Energy Wastage Simulation | Answer: 18/118 ≈ 15% (wasted/total)</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

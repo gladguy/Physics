@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter: Gravitation - Interactive Simulations</title>
+    <meta name="description" content="Interactive physics simulations for learning gravitation concepts">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-primary: #0a0f1c;
+            --bg-card: rgba(20, 30, 50, 0.8);
+            --accent-gold: #ffd700;
+            --accent-cyan: #00d4ff;
+            --accent-green: #00e676;
+            --accent-orange: #ff9f1c;
+            --text-primary: #ffffff;
+            --text-secondary: #a0b0c0;
+            --border-color: rgba(100, 150, 200, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            background-image:
+                radial-gradient(ellipse at 20% 30%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(255, 215, 0, 0.05) 0%, transparent 40%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Stars */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(1px 1px at 100px 100px, white, transparent),
+                radial-gradient(1px 1px at 200px 200px, rgba(255, 255, 255, 0.7), transparent),
+                radial-gradient(1px 1px at 300px 150px, white, transparent),
+                radial-gradient(1px 1px at 400px 250px, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 500px 50px, white, transparent);
+            background-size: 500px 300px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .chapter-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-gold), var(--accent-orange));
+            color: #000;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .simulations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .simulation-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .simulation-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.15);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-number {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-cyan);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .card-concepts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .concept-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .card-answer {
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid var(--accent-green);
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .answer-label {
+            color: var(--accent-green);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .answer-value {
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-cyan), #0096c7);
+            color: #000;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .simulation-card:hover .launch-btn {
+            transform: scale(1.02);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .simulations-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="chapter-badge">📚 Chapter</div>
+            <h1>Gravitation</h1>
+            <p class="subtitle">Interactive Physics Simulations</p>
+        </header>
+
+        <div class="simulations-grid">
+            <!-- Simulation 1: Gravitational Force Series -->
+            <a href="gravity-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🌌</div>
+                <span class="card-number">Simulation 01</span>
+                <h2 class="card-title">Gravitational Force Geometric Series</h2>
+                <p class="card-description">
+                    Visualize how gravitational forces from point masses at geometric positions
+                    (1m, 2m, 4m, 8m...) converge to a finite sum.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Geometric Series</span>
+                    <span class="concept-tag">Inverse Square Law</span>
+                    <span class="concept-tag">Convergence</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Key Result</div>
+                    <div class="answer-value">∑F = (4/3) GMm</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+
+            <!-- Simulation 2: Falling Water Drops -->
+            <a href="water-drops-simulation/index.html" class="simulation-card">
+                <div class="card-icon">💧</div>
+                <span class="card-number">Simulation 02</span>
+                <h2 class="card-title">Falling Water Drops</h2>
+                <p class="card-description">
+                    Six water drops fall from a 20m building at regular intervals.
+                    Find their positions when the first drop hits the ground.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Free Fall</span>
+                    <span class="concept-tag">Kinematics</span>
+                    <span class="concept-tag">h = ½gt²</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Answer (Drop 2 & 4)</div>
+                    <div class="answer-value">7.2 m and 16.8 m</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+
+            <!-- Simulation 3: Satellite Energy Ratio -->
+            <a href="satellite-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🛰️</div>
+                <span class="card-number">Simulation 03</span>
+                <h2 class="card-title">Satellite Energy Ratio</h2>
+                <p class="card-description">
+                    Explore the relationship between potential and kinetic energy
+                    for satellites in circular orbits around Earth.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Orbital Mechanics</span>
+                    <span class="concept-tag">PE & KE</span>
+                    <span class="concept-tag">Energy Conservation</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">PE / KE Ratio</div>
+                    <div class="answer-value">-2</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+
+            <!-- Simulation 4: Coriolis Effect on Trains -->
+            <a href="coriolis-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🌍</div>
+                <span class="card-number">Simulation 04</span>
+                <h2 class="card-title">Coriolis Force on Trains</h2>
+                <p class="card-description">
+                    Two trains on the equator move in opposite directions.
+                    See how Earth's rotation affects their apparent weight.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Coriolis Effect</span>
+                    <span class="concept-tag">Centrifugal Force</span>
+                    <span class="concept-tag">Reference Frames</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">More Force on Tracks</div>
+                    <div class="answer-value">Train A (East→West)</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+
+            <!-- Simulation 5: Free-Fall Storey Problem -->
+            <a href="freefall-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🏢</div>
+                <span class="card-number">Simulation 05</span>
+                <h2 class="card-title">Free-Fall Storey Problem</h2>
+                <p class="card-description">
+                    A ball dropped from a 16-storey building takes 4 seconds.
+                    Count storeys passed in each second of fall.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Free Fall</span>
+                    <span class="concept-tag">d = ½gt²</span>
+                    <span class="concept-tag">Pattern 1:3:5:7</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Last Second (3-4s)</div>
+                    <div class="answer-value">7 storeys</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+
+            <!-- Simulation 6: Custom Force Law -->
+            <a href="forcelaw-simulation/index.html" class="simulation-card">
+                <div class="card-icon">⭐</div>
+                <span class="card-number">Simulation 06</span>
+                <h2 class="card-title">Custom Gravitational Force Law</h2>
+                <p class="card-description">
+                    A planet orbits a star with unusual gravity: F ∝ R⁻⁵/².
+                    Discover the relationship between T² and R.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Centripetal Force</span>
+                    <span class="concept-tag">Modified Gravity</span>
+                    <span class="concept-tag">Orbital Period</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">T² Proportional To</div>
+                    <div class="answer-value">R⁷/²</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+
+            <!-- Simulation 7: KE Halving Problem -->
+            <a href="ke-simulation/index.html" class="simulation-card">
+                <div class="card-icon">⚡</div>
+                <span class="card-number">Simulation 07</span>
+                <h2 class="card-title">KE Reduction Problem</h2>
+                <p class="card-description">
+                    A body thrown upward with v₀ = 4 m/s.
+                    Find the height where KE becomes half.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Energy Conservation</span>
+                    <span class="concept-tag">KE + PE = const</span>
+                    <span class="concept-tag">Projectile Motion</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Height for ½KE</div>
+                    <div class="answer-value">0.4 m</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+
+            <!-- Simulation 8: Kepler's Third Law -->
+            <a href="kepler-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🪐</div>
+                <span class="card-number">Simulation 08</span>
+                <h2 class="card-title">Kepler's Third Law - Period Ratio</h2>
+                <p class="card-description">
+                    Two planets at R₁ = 10¹² m and R₂ = 10¹⁰ m.
+                    Find the ratio of their orbital periods.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Kepler's Law</span>
+                    <span class="concept-tag">T² ∝ R³</span>
+                    <span class="concept-tag">Orbital Mechanics</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Period Ratio T₁:T₂</div>
+                    <div class="answer-value">1000:1</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+            <!-- Simulation 9: Falling Stones Velocity Ratio -->
+            <a href="stones-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🪨</div>
+                <span class="card-number">Simulation 09</span>
+                <h2 class="card-title">Falling Stones - Velocity Ratio</h2>
+                <p class="card-description">
+                    Two stones dropped from heights h₁:h₂ = 2:3.
+                    Find the ratio of their final velocities.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Free Fall</span>
+                    <span class="concept-tag">v² = 2gh</span>
+                    <span class="concept-tag">Square Root</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Velocity Ratio v₂:v₁</div>
+                    <div class="answer-value">√3:√2</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+            <!-- Simulation 10: Last t Seconds of Ascent -->
+            <a href="ascent-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🚀</div>
+                <span class="card-number">Simulation 10</span>
+                <h2 class="card-title">Last 't' Seconds of Ascent</h2>
+                <p class="card-description">
+                    Ball thrown upward with speed u.
+                    Find distance covered in last t seconds before max height.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Symmetry</span>
+                    <span class="concept-tag">Free Fall</span>
+                    <span class="concept-tag">Projectile</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Distance in last t seconds</div>
+                    <div class="answer-value">½gt²</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+            <!-- Simulation 11: Energy Wastage Percentage -->
+            <a href="wastage-simulation/index.html" class="simulation-card">
+                <div class="card-icon">🧱</div>
+                <span class="card-number">Simulation 11</span>
+                <h2 class="card-title">Energy Wastage Percentage</h2>
+                <p class="card-description">
+                    Mason throws brick to 10m height.
+                    At 10m, brick has v = 6 m/s. Find % energy wasted.
+                </p>
+                <div class="card-concepts">
+                    <span class="concept-tag">Energy</span>
+                    <span class="concept-tag">KE + PE</span>
+                    <span class="concept-tag">Efficiency</span>
+                </div>
+                <div class="card-answer">
+                    <div class="answer-label">Energy Wasted</div>
+                    <div class="answer-value">≈ 15%</div>
+                </div>
+                <div class="launch-btn">
+                    <span>▶</span> Launch Simulation
+                </div>
+            </a>
+        </div>
+        <!-- Simulation 12: Two Balls Time Delay -->
+        <a href="dualball-simulation/index.html" class="simulation-card">
+            <div class="card-icon">🎾</div>
+            <span class="card-number">Simulation 12</span>
+            <h2 class="card-title">Two Balls - Time Delay</h2>
+            <p class="card-description">
+                Ball 2 dropped 2s after Ball 1.
+                Both hit ground at t=5s. Find Δh and h₁.
+            </p>
+            <div class="card-concepts">
+                <span class="concept-tag">Free Fall</span>
+                <span class="concept-tag">Timing</span>
+                <span class="concept-tag">h=½gt²</span>
+            </div>
+            <div class="card-answer">
+                <div class="answer-label">Δh, h₁</div>
+                <div class="answer-value">78.4m, 122.5m</div>
+            </div>
+            <div class="launch-btn">
+                <span>▶</span> Launch Simulation
+            </div>
+        </a>
+        <!-- Simulation 13: Retrograde Satellite -->
+        <a href="retrograde-simulation/index.html" class="simulation-card">
+            <div class="card-icon">🛰️</div>
+            <span class="card-number">Simulation 13</span>
+            <h2 class="card-title">Retrograde Satellite</h2>
+            <p class="card-description">
+                Satellite seen every 6h over equator.
+                Moves opposite to Earth rotation. Find ω.
+            </p>
+            <div class="card-concepts">
+                <span class="concept-tag">Angular</span>
+                <span class="concept-tag">Retrograde</span>
+                <span class="concept-tag">Relative</span>
+            </div>
+            <div class="card-answer">
+                <div class="answer-label">ω_satellite</div>
+                <div class="answer-value">π/4 rad/h</div>
+            </div>
+            <div class="launch-btn">
+                <span>▶</span> Launch Simulation
+            </div>
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-links">
+            <a href="gravity-simulation/index.html">Simulation 1</a>
+            <a href="water-drops-simulation/index.html">Simulation 2</a>
+            <a href="satellite-simulation/index.html">Simulation 3</a>
+            <a href="coriolis-simulation/index.html">Simulation 4</a>
+            <a href="freefall-simulation/index.html">Simulation 5</a>
+            <a href="forcelaw-simulation/index.html">Simulation 6</a>
+            <a href="ke-simulation/index.html">Simulation 7</a>
+            <a href="kepler-simulation/index.html">Simulation 8</a>
+            <a href="stones-simulation/index.html">Simulation 9</a>
+            <a href="ascent-simulation/index.html">Simulation 10</a>
+            <a href="wastage-simulation/index.html">Simulation 11</a>
+            <a href="dualball-simulation/index.html">Simulation 12</a>
+            <a href="retrograde-simulation/index.html">Simulation 13</a>
+        </div>
+        <p>Physics Education Simulations | Gravitation Chapter</p>
+    </footer>
+    </div>
+</body>
+
+</html>

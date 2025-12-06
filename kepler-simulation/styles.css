@@ -1,0 +1,622 @@
+/* ===== CSS Reset & Variables ===== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    /* Space Theme Colors */
+    --bg-space: #050810;
+    --bg-deep: #0a0f18;
+    --bg-panel: rgba(10, 15, 24, 0.9);
+    --sun-color: #ffd93d;
+    --sun-glow: #ff9500;
+    --planet1-color: #4a90d9;
+    --planet2-color: #e24a6f;
+    --orbit1-color: rgba(74, 144, 217, 0.3);
+    --orbit2-color: rgba(226, 74, 111, 0.3);
+    --accent-gold: #ffd700;
+    --accent-green: #00e676;
+    --text-primary: #ffffff;
+    --text-secondary: #b8c5d6;
+    --text-muted: #6b7c93;
+    --border-color: rgba(255, 215, 0, 0.15);
+
+    /* Typography */
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+
+    /* Border Radius */
+    --radius-sm: 6px;
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    /* Transitions */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+}
+
+/* ===== Base Styles ===== */
+body {
+    font-family: var(--font-main);
+    background: var(--bg-space);
+    background-image:
+        radial-gradient(ellipse at 50% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 50%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+/* Stars */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        radial-gradient(1px 1px at 80px 100px, white, transparent),
+        radial-gradient(1.5px 1.5px at 200px 50px, rgba(255, 255, 255, 0.8), transparent),
+        radial-gradient(1px 1px at 350px 180px, white, transparent),
+        radial-gradient(1px 1px at 450px 80px, rgba(255, 255, 255, 0.6), transparent),
+        radial-gradient(1px 1px at 120px 250px, white, transparent);
+    background-size: 500px 300px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+}
+
+/* ===== App Container ===== */
+.app-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ===== Header ===== */
+.header {
+    text-align: center;
+    padding: var(--spacing-lg) 0;
+    margin-bottom: var(--spacing-md);
+    position: relative;
+}
+
+.menu-btn {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: all var(--transition-fast);
+}
+
+.menu-btn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    color: var(--accent-gold);
+}
+
+.header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--sun-color), var(--sun-glow));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-xs);
+}
+
+.header .subtitle {
+    color: var(--text-secondary);
+    font-size: 1rem;
+}
+
+/* ===== Main Content Grid ===== */
+.main-content {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    grid-template-rows: auto auto;
+    gap: var(--spacing-lg);
+    flex: 1;
+}
+
+/* ===== Solar View ===== */
+.solar-view {
+    position: relative;
+    background: radial-gradient(ellipse at center, #0f1520 0%, #050810 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    min-height: 500px;
+}
+
+#solar-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.orbit-labels {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.orbit-label {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+}
+
+.orbit-label.outer {
+    background: rgba(74, 144, 217, 0.2);
+    border: 1px solid var(--planet1-color);
+    color: var(--planet1-color);
+}
+
+.orbit-label.inner {
+    background: rgba(226, 74, 111, 0.2);
+    border: 1px solid var(--planet2-color);
+    color: var(--planet2-color);
+}
+
+/* ===== Right Panel ===== */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* ===== Panel Styles ===== */
+.problem-box,
+.control-panel,
+.planet-panel,
+.ratio-panel,
+.derivation-panel,
+.quiz-panel,
+.graph-panel {
+    background: var(--bg-panel);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+    backdrop-filter: blur(10px);
+}
+
+.problem-box h3,
+.control-panel h3,
+.planet-panel h3,
+.ratio-panel h3,
+.derivation-panel h3,
+.quiz-panel h3,
+.graph-panel h3 {
+    font-size: 0.85rem;
+    color: var(--accent-gold);
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Problem Box */
+.problem-box p,
+.problem-box ul {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.problem-box ul {
+    list-style: none;
+    padding-left: var(--spacing-sm);
+}
+
+.problem-box li {
+    margin-bottom: var(--spacing-xs);
+}
+
+.problem-box .question {
+    color: var(--sun-color);
+    font-weight: 500;
+}
+
+/* ===== Control Panel ===== */
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.control-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.control-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--accent-gold);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.control-btn.primary {
+    background: linear-gradient(135deg, var(--accent-green), #69f0ae);
+    border-color: transparent;
+    color: #000;
+}
+
+.control-btn.highlight {
+    background: linear-gradient(135deg, var(--sun-color), var(--sun-glow));
+    border-color: transparent;
+    color: #000;
+}
+
+/* Speed Controls */
+.speed-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.speed-group label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.speed-buttons {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.speed-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.speed-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.speed-btn.active {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+    color: #000;
+}
+
+/* ===== Planet Panel ===== */
+.planet-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.planet-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.planet-dot.outer {
+    background: var(--planet1-color);
+    box-shadow: 0 0 8px var(--planet1-color);
+}
+
+.planet-dot.inner {
+    background: var(--planet2-color);
+    box-shadow: 0 0 8px var(--planet2-color);
+}
+
+.planet-name {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    width: 110px;
+}
+
+.progress-track {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--planet1-color), #82b1ff);
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.progress-fill.inner {
+    background: linear-gradient(90deg, var(--planet2-color), #ff82a9);
+}
+
+.progress-pct {
+    width: 40px;
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    text-align: right;
+}
+
+.orbit-counter {
+    text-align: center;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.orbit-counter strong {
+    color: var(--planet2-color);
+    font-size: 1.2rem;
+}
+
+/* ===== Ratio Panel ===== */
+.ratio-calc {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.calc-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+}
+
+.calc-row.highlight {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid var(--accent-gold);
+}
+
+.calc-row span:first-child {
+    width: 100px;
+    color: var(--text-muted);
+}
+
+.calc-value {
+    color: var(--text-secondary);
+}
+
+.calc-value strong {
+    color: var(--accent-gold);
+    font-size: 1rem;
+}
+
+/* ===== Bottom Panel ===== */
+.bottom-panel {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1.5fr 0.8fr 0.9fr;
+    gap: var(--spacing-md);
+}
+
+/* Derivation Panel */
+.derivation-panel {
+    opacity: 0.6;
+    transition: opacity var(--transition-normal);
+}
+
+.derivation-panel.revealed {
+    opacity: 1;
+}
+
+.derivation-steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.deriv-step {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid transparent;
+    opacity: 0.5;
+    transition: all var(--transition-normal);
+}
+
+.deriv-step.active {
+    opacity: 1;
+    background: rgba(74, 158, 255, 0.05);
+    border-left-color: var(--planet1-color);
+}
+
+.deriv-step.highlight {
+    opacity: 1;
+    background: rgba(255, 215, 0, 0.1);
+    border-left-color: var(--accent-gold);
+}
+
+.deriv-step .step-num {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--planet1-color);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #000;
+    flex-shrink: 0;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.step-formula {
+    font-size: 0.85rem;
+}
+
+/* Quiz Panel */
+.quiz-panel>p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.quiz-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xs);
+}
+
+.quiz-option {
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.quiz-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.quiz-option.correct {
+    background: rgba(0, 230, 118, 0.2);
+    border-color: var(--accent-green);
+    color: var(--accent-green);
+}
+
+.quiz-option.wrong {
+    background: rgba(255, 82, 82, 0.2);
+    border-color: #ff5252;
+    color: #ff5252;
+}
+
+.quiz-feedback {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    display: none;
+}
+
+.quiz-feedback.show {
+    display: block;
+}
+
+.quiz-feedback.correct {
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px solid var(--accent-green);
+    color: var(--accent-green);
+}
+
+.quiz-feedback.wrong {
+    background: rgba(255, 82, 82, 0.1);
+    border: 1px solid #ff5252;
+    color: #ff5252;
+}
+
+/* Graph Panel */
+.graph-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#graph-canvas {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.graph-info {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+/* ===== Footer ===== */
+.footer {
+    text-align: center;
+    padding: var(--spacing-md) 0;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1200px) {
+    .main-content {
+        grid-template-columns: 1fr;
+    }
+
+    .bottom-panel {
+        grid-column: auto;
+        grid-template-columns: 1fr;
+    }
+
+    .solar-view {
+        min-height: 400px;
+    }
+
+    .menu-btn {
+        position: static;
+        transform: none;
+        margin-bottom: var(--spacing-md);
+    }
+}

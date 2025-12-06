@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Force Law - T² ∝ R⁷/²</title>
+    <meta name="description" content="Interactive simulation of orbital motion under F ∝ R⁻⁵/² force law">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>⭐ Custom Gravitational Force Law</h1>
+            <p class="subtitle">Orbital Motion with F ∝ R⁻⁵/²</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Orbit View -->
+            <div class="orbit-view">
+                <canvas id="orbit-canvas"></canvas>
+                <div class="orbit-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Radius (R):</span>
+                        <span class="stat-value" id="radius-display">1.00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Period (T):</span>
+                        <span class="stat-value" id="period-display">1.00</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Orbit Time:</span>
+                        <span class="stat-value" id="orbit-time">0.00s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>A light planet orbits a massive star in a <strong>circular orbit</strong> of radius R.</p>
+                    <p>The gravitational force follows: <strong>F ∝ R⁻⁵/²</strong></p>
+                    <p class="question">What is T² proportional to?</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="derive-btn" class="control-btn highlight">
+                            <span class="icon">📐</span> Derive T²
+                        </button>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>
+                            Orbital Radius (R):
+                            <input type="range" id="radius-slider" min="0.5" max="3" value="1" step="0.1">
+                            <span id="radius-value">1.0</span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <label class="toggle">
+                            <input type="checkbox" id="show-vectors" checked>
+                            <span>Show Force & Velocity Vectors</span>
+                        </label>
+                        <label class="toggle">
+                            <input type="checkbox" id="show-trail" checked>
+                            <span>Show Orbit Trail</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Physics Data -->
+                <div class="physics-panel">
+                    <h3>📊 Physics Data</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Force (F)</span>
+                            <span class="data-value" id="force-value">1.000</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">T²</span>
+                            <span class="data-value" id="t-squared">1.000</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">R⁷/²</span>
+                            <span class="data-value" id="r-power">1.000</span>
+                        </div>
+                        <div class="data-item highlight">
+                            <span class="data-label">T² / R⁷/²</span>
+                            <span class="data-value" id="ratio-value">1.000</span>
+                        </div>
+                    </div>
+                    <div class="verification-box">
+                        <span class="verified-label">✓ Constant!</span>
+                        <span class="verified-text">T² ∝ R⁷/² verified</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="derivation-panel" id="derivation-panel">
+                    <h3>📐 Mathematical Derivation</h3>
+                    <div class="derivation-steps">
+                        <div class="deriv-step" data-step="1">
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <div class="step-title">Centripetal Force</div>
+                                <div class="step-formula">\[ F_c = m\omega^2 R = m \frac{4\pi^2}{T^2} R \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="2">
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <div class="step-title">Given Force Law</div>
+                                <div class="step-formula">\[ F_g \propto R^{-5/2} \implies F_g = \frac{k}{R^{5/2}} \]
+                                </div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="3">
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <div class="step-title">Equate Forces</div>
+                                <div class="step-formula">\[ \frac{4\pi^2 m R}{T^2} = \frac{k}{R^{5/2}} \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step highlight" data-step="4">
+                            <span class="step-num">4</span>
+                            <div class="step-content">
+                                <div class="step-title">Solve for T²</div>
+                                <div class="step-formula">\[ T^2 = \frac{4\pi^2 m}{k} \cdot R \cdot R^{5/2} =
+                                    \frac{4\pi^2 m}{k} \cdot R^{7/2} \implies \boxed{T^2 \propto R^{7/2}} \]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>T² is proportional to:</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">A) R³</button>
+                        <button class="quiz-option" data-answer="correct">B) R⁷/²</button>
+                        <button class="quiz-option" data-answer="wrong">C) R³/²</button>
+                        <button class="quiz-option" data-answer="wrong">D) R⁹/²</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Graph -->
+                <div class="graph-panel">
+                    <h3>📈 T² vs R⁷/² Graph</h3>
+                    <canvas id="graph-canvas" width="280" height="180"></canvas>
+                    <div class="graph-info">Linear relationship confirms T² ∝ R⁷/²</div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Custom Force Law Simulation | F ∝ R⁻⁵/² → T² ∝ R⁷/²</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

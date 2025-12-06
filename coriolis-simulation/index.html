@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coriolis Force - Train Weight Difference</title>
+    <meta name="description"
+        content="Interactive simulation showing how Earth's rotation affects apparent weight of trains">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🌍 Coriolis Effect on Trains</h1>
+            <p class="subtitle">How Earth's Rotation Affects Train Weight at the Equator</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Earth View -->
+            <div class="earth-view">
+                <canvas id="earth-canvas"></canvas>
+                <div class="earth-info">
+                    <div class="rotation-indicator">
+                        <span class="arrow">↻</span>
+                        <span>Earth rotates East</span>
+                    </div>
+                    <div class="speed-info">
+                        <span class="label">Equator speed:</span>
+                        <span class="value" id="earth-speed">465 m/s</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>Two identical trains on the equator:</p>
+                    <div class="train-labels">
+                        <div class="train-label train-a">
+                            <span class="dot"></span>
+                            Train A: East → West
+                        </div>
+                        <div class="train-label train-b">
+                            <span class="dot"></span>
+                            Train B: West → East
+                        </div>
+                    </div>
+                    <p class="question">Which train exerts <strong>more force</strong> on the tracks?</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="analyze-btn" class="control-btn highlight">
+                            <span class="icon">📊</span> Analyze Forces
+                        </button>
+                    </div>
+
+                    <div class="slider-group">
+                        <label>
+                            Train Speed:
+                            <input type="range" id="speed-slider" min="10" max="100" value="30" step="5">
+                            <span id="speed-value">30 m/s (108 km/h)</span>
+                        </label>
+                    </div>
+
+                    <div class="toggle-group">
+                        <label class="toggle">
+                            <input type="checkbox" id="show-vectors" checked>
+                            <span>Show Velocity Vectors</span>
+                        </label>
+                        <label class="toggle">
+                            <input type="checkbox" id="show-forces" checked>
+                            <span>Show Force Diagrams</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Train Comparison -->
+                <div class="comparison-panel">
+                    <h3>⚖️ Force Comparison</h3>
+
+                    <div class="train-comparison">
+                        <div class="train-data train-a-data">
+                            <div class="train-header">
+                                <span class="dot"></span>
+                                Train A (E→W)
+                            </div>
+                            <div class="data-row">
+                                <span>Effective Speed:</span>
+                                <span id="v-eff-a">435 m/s</span>
+                            </div>
+                            <div class="data-row">
+                                <span>Centrifugal Acc:</span>
+                                <span id="ac-a">0.0297 m/s²</span>
+                            </div>
+                            <div class="data-row highlight">
+                                <span>Force on Track:</span>
+                                <span id="force-a">489,850 N</span>
+                            </div>
+                        </div>
+
+                        <div class="train-data train-b-data">
+                            <div class="train-header">
+                                <span class="dot"></span>
+                                Train B (W→E)
+                            </div>
+                            <div class="data-row">
+                                <span>Effective Speed:</span>
+                                <span id="v-eff-b">495 m/s</span>
+                            </div>
+                            <div class="data-row">
+                                <span>Centrifugal Acc:</span>
+                                <span id="ac-b">0.0385 m/s²</span>
+                            </div>
+                            <div class="data-row highlight">
+                                <span>Force on Track:</span>
+                                <span id="force-b">488,075 N</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="force-difference">
+                        <span class="diff-label">Difference:</span>
+                        <span class="diff-value" id="force-diff">1,775 N (0.36%)</span>
+                    </div>
+
+                    <div class="force-meters">
+                        <div class="meter">
+                            <div class="meter-label">Train A</div>
+                            <div class="meter-bar">
+                                <div class="meter-fill train-a-meter" id="meter-a"></div>
+                            </div>
+                        </div>
+                        <div class="meter">
+                            <div class="meter-label">Train B</div>
+                            <div class="meter-bar">
+                                <div class="meter-fill train-b-meter" id="meter-b"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Physics Explanation -->
+                <div class="explanation-panel" id="explanation-panel">
+                    <h3>📐 Physics Explanation</h3>
+                    <div class="explanation-steps">
+                        <div class="exp-step" data-step="1">
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <div class="step-title">Earth's Rotation</div>
+                                <div class="step-text">Earth rotates eastward at \(v_{Earth} = \omega R \approx 465
+                                    \text{ m/s}\) at equator</div>
+                            </div>
+                        </div>
+                        <div class="exp-step" data-step="2">
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <div class="step-title">Effective Speed</div>
+                                <div class="step-text">
+                                    Train B (→East): \(v_{eff} = 465 + 30 = 495 \text{ m/s}\)<br>
+                                    Train A (→West): \(v_{eff} = 465 - 30 = 435 \text{ m/s}\)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="exp-step" data-step="3">
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <div class="step-title">Centrifugal Force</div>
+                                <div class="step-text">\(F_c = \frac{mv_{eff}^2}{R}\) — Higher speed = more outward
+                                    force = less weight</div>
+                            </div>
+                        </div>
+                        <div class="exp-step highlight" data-step="4">
+                            <span class="step-num">4</span>
+                            <div class="step-content">
+                                <div class="step-title">Conclusion</div>
+                                <div class="step-text"><strong>Train A (westbound)</strong> has lower effective speed →
+                                    less centrifugal → <strong>MORE force on tracks</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>Which train exerts more force on the tracks?</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="correct">A) Train A (East→West)</button>
+                        <button class="quiz-option" data-answer="wrong">B) Train B (West→East)</button>
+                        <button class="quiz-option" data-answer="wrong">C) Both Same</button>
+                        <button class="quiz-option" data-answer="wrong">D) Depends on Mass</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Vector Diagram -->
+                <div class="vector-panel">
+                    <h3>⬆️ Force Vectors</h3>
+                    <canvas id="vector-canvas" width="250" height="200"></canvas>
+                    <div class="vector-legend">
+                        <div class="legend-item">
+                            <span class="legend-line weight"></span>
+                            <span>Weight (mg)</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-line centrifugal"></span>
+                            <span>Centrifugal</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-line normal"></span>
+                            <span>Normal (Track)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Coriolis Force Simulation | Physics Education Tool</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

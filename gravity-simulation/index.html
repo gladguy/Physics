@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gravitational Force Geometric Series Simulation</title>
+    <meta name="description"
+        content="Interactive physics simulation demonstrating gravitational force series convergence to 4/3 GMm">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🌌 Gravitational Force Series</h1>
+            <p class="subtitle">Geometric Progression of Point Masses</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Canvas Container -->
+            <div class="canvas-container">
+                <canvas id="simulation-canvas"></canvas>
+                <div class="canvas-overlay" id="hover-tooltip"></div>
+            </div>
+
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="controls-section">
+                    <h3>🎮 Animation Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="step-btn" class="control-btn">
+                            <span class="icon">⏭</span> Step
+                        </button>
+                    </div>
+                </div>
+
+                <div class="controls-section">
+                    <h3>⚡ Speed Control</h3>
+                    <div class="speed-controls">
+                        <button class="speed-btn" data-speed="0.5">0.5x</button>
+                        <button class="speed-btn active" data-speed="1">1x</button>
+                        <button class="speed-btn" data-speed="2">2x</button>
+                    </div>
+                </div>
+
+                <div class="controls-section">
+                    <h3>🔧 Parameters</h3>
+                    <div class="parameter-group">
+                        <label>
+                            Central Mass M:
+                            <input type="range" id="mass-M" min="1" max="10" value="1" step="0.5">
+                            <span id="mass-M-value">1</span>
+                        </label>
+                        <label>
+                            Point Mass m:
+                            <input type="range" id="mass-m" min="1" max="10" value="1" step="0.5">
+                            <span id="mass-m-value">1</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="controls-section">
+                    <h3>👁 Display Options</h3>
+                    <div class="toggle-group">
+                        <label class="toggle">
+                            <input type="checkbox" id="show-vectors" checked>
+                            <span>Show Force Vectors</span>
+                        </label>
+                        <label class="toggle">
+                            <input type="checkbox" id="show-grid" checked>
+                            <span>Show Grid</span>
+                        </label>
+                        <label class="toggle">
+                            <input type="checkbox" id="show-labels" checked>
+                            <span>Show Labels</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Information Panel -->
+            <div class="info-panel">
+                <!-- Formula Display -->
+                <div class="formula-display">
+                    <h3>📐 Mathematical Formula</h3>
+                    <div id="formula-container" class="formula-box">
+                        <div class="formula-step" id="formula-individual">
+                            \[ F_i = \frac{G \cdot M \cdot m}{r_i^2} \]
+                        </div>
+                        <div class="formula-step" id="formula-series">
+                            \[ F_{total} = GMm \left( \frac{1}{1^2} + \frac{1}{2^2} + \frac{1}{4^2} + \frac{1}{8^2} +
+                            \cdots \right) \]
+                        </div>
+                        <div class="formula-step" id="formula-geometric">
+                            \[ = GMm \sum_{n=0}^{\infty} \frac{1}{4^n} = GMm \cdot \frac{1}{1 - \frac{1}{4}} \]
+                        </div>
+                        <div class="formula-step highlight" id="formula-result">
+                            \[ = \frac{4}{3} GMm \approx 1.333\, GMm \]
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Force Display -->
+                <div class="force-display">
+                    <h3>⚡ Force Magnitudes</h3>
+                    <div class="forces-grid" id="forces-grid">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                    <div class="total-force">
+                        <span class="label">Running Total:</span>
+                        <span class="value" id="running-total">0.000 GMm</span>
+                    </div>
+                    <div class="expected-value">
+                        <span class="label">Expected (4/3):</span>
+                        <span class="value">1.333 GMm</span>
+                    </div>
+                </div>
+
+                <!-- Educational Steps -->
+                <div class="education-panel">
+                    <h3>📚 Current Step</h3>
+                    <div class="step-indicator">
+                        <div class="step-number" id="step-number">1</div>
+                        <div class="step-description" id="step-description">
+                            Initial state: Showing all masses at their geometric positions
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Multiple Choice Quiz -->
+        <div class="quiz-section">
+            <h3>🎯 Quick Check</h3>
+            <p>What is the total gravitational force on M from all point masses?</p>
+            <div class="quiz-options" id="quiz-options">
+                <button class="quiz-option" data-answer="wrong">A) GMm</button>
+                <button class="quiz-option" data-answer="wrong">B) 2 GMm</button>
+                <button class="quiz-option" data-answer="correct">C) (4/3) GMm</button>
+                <button class="quiz-option" data-answer="wrong">D) ∞ (infinite)</button>
+            </div>
+            <div class="quiz-feedback" id="quiz-feedback"></div>
+        </div>
+
+        <footer class="footer">
+            <p>Gravitational Force Simulation | Physics Education Tool</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

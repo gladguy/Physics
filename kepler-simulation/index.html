@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kepler's Third Law - Period Ratio</title>
+    <meta name="description"
+        content="Compare orbital periods of planets at different distances using Kepler's Third Law">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🪐 Kepler's Third Law</h1>
+            <p class="subtitle">Two Planets: R₁ = 10¹² m, R₂ = 10¹⁰ m</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Solar System View -->
+            <div class="solar-view">
+                <canvas id="solar-canvas"></canvas>
+                <div class="orbit-labels">
+                    <div class="orbit-label outer">R₁ = 10¹² m</div>
+                    <div class="orbit-label inner">R₂ = 10¹⁰ m</div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>Two planets orbit the Sun at distances:</p>
+                    <ul>
+                        <li><strong>Planet 1:</strong> R₁ = 10¹² m</li>
+                        <li><strong>Planet 2:</strong> R₂ = 10¹⁰ m</li>
+                    </ul>
+                    <p class="question">What is the ratio T₁ : T₂?</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="derive-btn" class="control-btn highlight">
+                            <span class="icon">📐</span> Derive
+                        </button>
+                    </div>
+
+                    <div class="speed-group">
+                        <label>Time Scale:</label>
+                        <div class="speed-buttons">
+                            <button class="speed-btn active" data-speed="1">1×</button>
+                            <button class="speed-btn" data-speed="10">10×</button>
+                            <button class="speed-btn" data-speed="100">100×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Planet Status -->
+                <div class="planet-panel">
+                    <h3>🌍 Orbit Progress</h3>
+                    <div class="planet-row">
+                        <div class="planet-dot outer"></div>
+                        <span class="planet-name">Planet 1 (Outer)</span>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="p1-progress"></div>
+                        </div>
+                        <span class="progress-pct" id="p1-pct">0%</span>
+                    </div>
+                    <div class="planet-row">
+                        <div class="planet-dot inner"></div>
+                        <span class="planet-name">Planet 2 (Inner)</span>
+                        <div class="progress-track">
+                            <div class="progress-fill inner" id="p2-progress"></div>
+                        </div>
+                        <span class="progress-pct" id="p2-pct">0%</span>
+                    </div>
+                    <div class="orbit-counter">
+                        <span>Inner Planet Orbits: <strong id="orbit-count">0</strong></span>
+                    </div>
+                </div>
+
+                <!-- Ratio Display -->
+                <div class="ratio-panel">
+                    <h3>📊 Period Ratio</h3>
+                    <div class="ratio-calc">
+                        <div class="calc-row">
+                            <span>R₁ / R₂</span>
+                            <span>=</span>
+                            <span class="calc-value">10¹² / 10¹⁰ = <strong>100</strong></span>
+                        </div>
+                        <div class="calc-row">
+                            <span>(R₁/R₂)^(3/2)</span>
+                            <span>=</span>
+                            <span class="calc-value">100^(3/2) = <strong>1000</strong></span>
+                        </div>
+                        <div class="calc-row highlight">
+                            <span>T₁ / T₂</span>
+                            <span>=</span>
+                            <span class="calc-value" id="ratio-display"><strong>1000</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="derivation-panel" id="derivation-panel">
+                    <h3>📐 Kepler's Third Law</h3>
+                    <div class="derivation-steps">
+                        <div class="deriv-step" data-step="1">
+                            <span class="step-num">1</span>
+                            <div class="step-content">
+                                <div class="step-title">Kepler's Law</div>
+                                <div class="step-formula">\[ T^2 \propto R^3 \implies T \propto R^{3/2} \]</div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="2">
+                            <span class="step-num">2</span>
+                            <div class="step-content">
+                                <div class="step-title">Radius Ratio</div>
+                                <div class="step-formula">\[ \frac{R_1}{R_2} = \frac{10^{12}}{10^{10}} = 10^2 = 100 \]
+                                </div>
+                            </div>
+                        </div>
+                        <div class="deriv-step" data-step="3">
+                            <span class="step-num">3</span>
+                            <div class="step-content">
+                                <div class="step-title">Period Ratio Formula</div>
+                                <div class="step-formula">\[ \frac{T_1}{T_2} = \left(\frac{R_1}{R_2}\right)^{3/2} \]
+                                </div>
+                            </div>
+                        </div>
+                        <div class="deriv-step highlight" data-step="4">
+                            <span class="step-num">4</span>
+                            <div class="step-content">
+                                <div class="step-title">Calculate</div>
+                                <div class="step-formula">\[ \frac{T_1}{T_2} = 100^{3/2} = (10^2)^{3/2} = 10^3 =
+                                    \boxed{1000} \]</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Answer</h3>
+                    <p>The ratio T₁ : T₂ is:</p>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="correct">A) 1000:1</button>
+                        <button class="quiz-option" data-answer="wrong">B) 100:1</button>
+                        <button class="quiz-option" data-answer="wrong">C) 10:1</button>
+                        <button class="quiz-option" data-answer="wrong">D) 1:1</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Log-Log Graph -->
+                <div class="graph-panel">
+                    <h3>📈 T² vs R³</h3>
+                    <canvas id="graph-canvas" width="280" height="180"></canvas>
+                    <div class="graph-info">Linear relationship confirms T² ∝ R³</div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Kepler's Third Law | T² ∝ R³ | T₁:T₂ = 1000:1</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

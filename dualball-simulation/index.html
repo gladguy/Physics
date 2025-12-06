@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Balls - Time Delay Drop</title>
+    <meta name="description" content="Two balls dropped with time delay, both hit ground at same time">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🎾 Two Balls - Time Delay</h1>
+            <p class="subtitle">Ball 2 dropped 2s after Ball 1 | Both hit ground at t=5s</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Canvas -->
+            <div class="animation-view">
+                <canvas id="animation-canvas"></canvas>
+                <div class="timeline-bar">
+                    <div class="timeline-track">
+                        <div class="timeline-marker" id="marker-0">0s</div>
+                        <div class="timeline-marker" id="marker-2">2s</div>
+                        <div class="timeline-marker" id="marker-5">5s</div>
+                        <div class="timeline-progress" id="timeline-progress"></div>
+                    </div>
+                    <div class="time-display">t = <span id="time-value">0.00</span> s</div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Problem Statement -->
+                <div class="problem-box">
+                    <h3>📋 Problem</h3>
+                    <p>Two balls are dropped from different heights.</p>
+                    <ul>
+                        <li>Ball 1 dropped at <strong>t = 0</strong></li>
+                        <li>Ball 2 dropped at <strong>t = 2s</strong></li>
+                        <li>Both hit ground at <strong>t = 5s</strong></li>
+                    </ul>
+                    <p class="question">Find: a) Height difference b) Height of Ball 1</p>
+                </div>
+
+                <!-- Controls -->
+                <div class="control-panel">
+                    <h3>🎮 Controls</h3>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Play
+                        </button>
+                        <button id="pause-btn" class="control-btn" disabled>
+                            <span class="icon">⏸</span> Pause
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                        <button id="skip-btn" class="control-btn highlight">
+                            <span class="icon">⏭</span> Skip to End
+                        </button>
+                    </div>
+
+                    <div class="speed-group">
+                        <label>Speed:</label>
+                        <div class="speed-buttons">
+                            <button class="speed-btn" data-speed="0.5">0.5×</button>
+                            <button class="speed-btn active" data-speed="1">1×</button>
+                            <button class="speed-btn" data-speed="2">2×</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ball Data Panels -->
+                <div class="balls-dashboard">
+                    <div class="ball-card ball1">
+                        <div class="ball-header">
+                            <div class="ball-dot blue"></div>
+                            <span>Ball 1</span>
+                        </div>
+                        <div class="ball-stats">
+                            <div class="stat">
+                                <span class="stat-label">Drop:</span>
+                                <span class="stat-value">t = 0s</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Fall time:</span>
+                                <span class="stat-value" id="fall-time-1">0.0s</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Height:</span>
+                                <span class="stat-value" id="height-1">122.5m</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Velocity:</span>
+                                <span class="stat-value" id="velocity-1">0.0 m/s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ball-card ball2">
+                        <div class="ball-header">
+                            <div class="ball-dot red"></div>
+                            <span>Ball 2</span>
+                        </div>
+                        <div class="ball-stats">
+                            <div class="stat">
+                                <span class="stat-label">Drop:</span>
+                                <span class="stat-value">t = 2s</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Fall time:</span>
+                                <span class="stat-value" id="fall-time-2">0.0s</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Height:</span>
+                                <span class="stat-value" id="height-2">44.1m</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Velocity:</span>
+                                <span class="stat-value" id="velocity-2">0.0 m/s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-grid">
+                        <div class="result-item">
+                            <span class="result-label">a) Δh =</span>
+                            <span class="result-value" id="result-diff">78.4 m</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">b) h₁ =</span>
+                            <span class="result-value" id="result-h1">122.5 m</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Calculations -->
+                <div class="calc-panel">
+                    <h3>📊 Calculations (g = 9.8 m/s²)</h3>
+                    <div class="calc-grid">
+                        <div class="calc-item">
+                            <div class="calc-title">Ball 1 (falls 5s):</div>
+                            <div class="calc-formula">h₁ = ½gt₁² = ½×9.8×25</div>
+                            <div class="calc-result">= <strong>122.5 m</strong></div>
+                        </div>
+                        <div class="calc-item">
+                            <div class="calc-title">Ball 2 (falls 3s):</div>
+                            <div class="calc-formula">h₂ = ½gt₂² = ½×9.8×9</div>
+                            <div class="calc-result">= <strong>44.1 m</strong></div>
+                        </div>
+                        <div class="calc-item highlight">
+                            <div class="calc-title">Height Difference:</div>
+                            <div class="calc-formula">Δh = h₁ - h₂ = 122.5 - 44.1</div>
+                            <div class="calc-result">= <strong>78.4 m</strong></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Correct Pair</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="correct">
+                            <span>a) 78.4 m</span>
+                            <span>b) 122.5 m</span>
+                        </button>
+                        <button class="quiz-option" data-answer="wrong">
+                            <span>a) 80 m</span>
+                            <span>b) 250 m</span>
+                        </button>
+                        <button class="quiz-option" data-answer="wrong">
+                            <span>a) 40 m</span>
+                            <span>b) 80 m</span>
+                        </button>
+                        <button class="quiz-option" data-answer="wrong">
+                            <span>a) 140 m</span>
+                            <span>b) 180 m</span>
+                        </button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Insight -->
+                <div class="insight-panel">
+                    <h3>💡 Key Insight</h3>
+                    <div class="insight-content">
+                        <p>Height difference formula:</p>
+                        <div class="insight-formula">
+                            Δh = ½g(t₁² - t₂²)
+                        </div>
+                        <p>= ½×9.8×(25-9)</p>
+                        <p>= 4.9 × 16 = <strong>78.4 m</strong></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Dual Ball Drop Simulation | Answer: Δh = 78.4m, h₁ = 122.5m</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
