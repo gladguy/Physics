@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Orbital Speed - Physics Animation</title>
+    <meta name="description" content="Calculate satellite orbital speed using v = √(gR²/(R+x))">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🛰️ Satellite Orbital Speed</h1>
+            <p class="subtitle">Satellite at height x from Earth surface | Find orbital velocity</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="stars" id="stars"></div>
+                    <div class="earth" id="earth">
+                        <div class="earth-glow"></div>
+                    </div>
+                    <div class="orbit-path" id="orbit-path"></div>
+                    <div class="satellite" id="satellite">
+                        <div class="solar-panel left"></div>
+                        <div class="solar-panel right"></div>
+                    </div>
+                    <div class="velocity-vector" id="velocity-vector"></div>
+                    <div class="gravity-vector" id="gravity-vector"></div>
+                    <div class="radius-label" id="radius-label">R</div>
+                    <div class="height-label" id="height-label">x</div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <div class="slider-group">
+                        <div class="slider-row">
+                            <label>Height (x):</label>
+                            <input type="range" id="height-slider" min="200" max="2000" value="500">
+                            <span class="slider-value" id="height-value">500 km</span>
+                        </div>
+                        <div class="slider-row">
+                            <label>Earth Radius (R):</label>
+                            <input type="range" id="radius-slider" min="4000" max="10000" value="6371">
+                            <span class="slider-value" id="radius-value">6371 km</span>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Start Orbit
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Orbital Data -->
+                <div class="data-panel">
+                    <h3>📊 Orbital Parameters</h3>
+                    <div class="data-grid">
+                        <div class="data-item highlight">
+                            <span class="data-label">Orbital Speed</span>
+                            <span class="data-value" id="speed-value">7.66 km/s</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Period</span>
+                            <span class="data-value" id="period-value">94.5 min</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Orbit Radius (R+x)</span>
+                            <span class="data-value" id="orbit-radius-value">6871 km</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Centripetal Accel</span>
+                            <span class="data-value" id="accel-value">8.54 m/s²</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Box -->
+                <div class="question-box">
+                    <h3>📋 Problem</h3>
+                    <p>A satellite of mass <strong>m</strong> revolves around Earth (radius <strong>R</strong>) at
+                        height <strong>x</strong> from surface.</p>
+                    <p class="question-highlight">If g is surface gravity, the orbital speed is:</p>
+                </div>
+
+                <!-- Quiz Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">g/x</button>
+                        <button class="quiz-option" data-answer="correct">(gR²/(R+x))^½</button>
+                        <button class="quiz-option" data-answer="wrong">gR²/(R+x)</button>
+                        <button class="quiz-option" data-answer="wrong">gR/(R-x)</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Formula</h3>
+                    <div class="formula-display">
+                        v = √(gR²/(R+x))
+                    </div>
+                    <div class="formula-note">Independent of satellite mass m</div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="derivation-panel">
+                    <h3>📊 Derivation</h3>
+                    <div class="derivation-steps">
+                        <div class="deriv-step">
+                            <span class="step-num">1</span>
+                            <span>Gravitational force = Centripetal force:</span>
+                        </div>
+                        <div class="deriv-eq">GMm/(R+x)² = mv²/(R+x)</div>
+                        <div class="deriv-step">
+                            <span class="step-num">2</span>
+                            <span>Cancel m and simplify: v² = GM/(R+x)</span>
+                        </div>
+                        <div class="deriv-step">
+                            <span class="step-num">3</span>
+                            <span>Use g = GM/R²: GM = gR²</span>
+                        </div>
+                        <div class="deriv-step highlight">
+                            <span class="step-num">4</span>
+                            <span><strong>v = √(gR²/(R+x))</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="insight-panel">
+                    <h3>💡 Key Insights</h3>
+                    <div class="insight-list">
+                        <p>✓ Speed is <strong>independent of satellite mass</strong></p>
+                        <p>✓ Speed <strong>decreases</strong> as height increases</p>
+                        <p>✓ At surface (x=0): v = √(gR)</p>
+                    </div>
+                </div>
+
+                <!-- Force Diagram -->
+                <div class="force-panel">
+                    <h3>⚖️ Forces</h3>
+                    <div class="force-diagram">
+                        <div class="force-item">
+                            <span class="force-arrow red">→</span>
+                            <span>Velocity (tangent)</span>
+                        </div>
+                        <div class="force-item">
+                            <span class="force-arrow green">→</span>
+                            <span>Gravity (toward center)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Satellite Orbital Speed | Answer: v = √(gR²/(R+x))</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
