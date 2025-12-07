@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Passes Through Same Height - Physics Animation</title>
+    <meta name="description" content="Stone passes through height 58.8m twice - find the time interval">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🎯 Two Passes Through Same Height</h1>
+            <p class="subtitle">Stone projected at 39.2 m/s | Find time interval between two passes at 58.8m</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="sky-gradient"></div>
+                    <div class="height-markers" id="height-markers"></div>
+                    <div class="target-height-line" id="target-height-line">
+                        <span class="target-label">58.8m (Target Height)</span>
+                    </div>
+                    <div class="max-height-line" id="max-height-line">
+                        <span class="max-label">78.4m (Max Height)</span>
+                    </div>
+                    <div class="pass-marker pass-up" id="pass-up-marker">
+                        <span>↑</span>
+                        <span class="time">t = 2s</span>
+                    </div>
+                    <div class="pass-marker pass-down" id="pass-down-marker">
+                        <span>↓</span>
+                        <span class="time">t = 6s</span>
+                    </div>
+                    <div class="stone" id="stone">
+                        <div class="stone-glow"></div>
+                    </div>
+                    <div class="ground">
+                        <div class="grass"></div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="play-btn" class="control-btn primary">
+                        <span class="icon">▶</span> Start
+                    </button>
+                    <button id="pause-btn" class="control-btn" disabled>
+                        <span class="icon">⏸</span> Pause
+                    </button>
+                    <button id="reset-btn" class="control-btn">
+                        <span class="icon">↺</span> Reset
+                    </button>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline-panel">
+                    <div class="timeline-bar">
+                        <div class="timeline-progress" id="timeline-progress"></div>
+                        <div class="timeline-marker" style="left: 0%">
+                            <span>Throw</span>
+                            <span class="time">0s</span>
+                        </div>
+                        <div class="timeline-marker pass1" style="left: 25%">
+                            <span>Pass ↑</span>
+                            <span class="time">2s</span>
+                        </div>
+                        <div class="timeline-marker max" style="left: 50%">
+                            <span>Max</span>
+                            <span class="time">4s</span>
+                        </div>
+                        <div class="timeline-marker pass2" style="left: 75%">
+                            <span>Pass ↓</span>
+                            <span class="time">6s</span>
+                        </div>
+                        <div class="timeline-marker" style="left: 100%">
+                            <span>Ground</span>
+                            <span class="time">8s</span>
+                        </div>
+                    </div>
+                    <div class="time-interval-display" id="time-interval-display">
+                        <span class="interval-label">⏱ Time Interval (Δt)</span>
+                        <span class="interval-value" id="interval-value">4 seconds</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Data Display -->
+                <div class="data-panel">
+                    <h3>📊 Live Data</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Height</span>
+                            <span class="data-value" id="height-value">0 m</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Velocity</span>
+                            <span class="data-value" id="velocity-value">39.2 m/s</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Time</span>
+                            <span class="data-value" id="time-value">0.0 s</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Phase</span>
+                            <span class="data-value phase" id="phase-value">Ready</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Question Box -->
+                <div class="question-box">
+                    <h3>📋 Question</h3>
+                    <p>A stone is projected <strong>vertically up</strong> from the ground with velocity
+                        <strong>39.2 m/s</strong>.
+                    </p>
+                    <p class="question-highlight">Find the interval of time between two instants at which
+                        the stone is at height of <strong>58.8 m</strong> above ground.</p>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="correct">4 s</button>
+                        <button class="quiz-option" data-answer="wrong">6 s</button>
+                        <button class="quiz-option" data-answer="wrong">8 s</button>
+                        <button class="quiz-option" data-answer="wrong">12 s</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">Time interval Δt =</span>
+                        <span class="result-value">4 seconds</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Physics Calculations -->
+                <div class="calc-panel">
+                    <h3>📊 Quadratic Equation Solution</h3>
+                    <div class="calc-steps">
+                        <div class="calc-step">
+                            <span class="step-num">1</span>
+                            <span>Height equation: h = ut - ½gt²</span>
+                        </div>
+                        <div class="calc-step">
+                            <span class="step-num">2</span>
+                            <span>58.8 = 39.2t - 4.9t² → <strong>4.9t² - 39.2t + 58.8 = 0</strong></span>
+                        </div>
+                        <div class="calc-step">
+                            <span class="step-num">3</span>
+                            <span>Divide by 4.9: t² - 8t + 12 = 0</span>
+                        </div>
+                        <div class="calc-step highlight">
+                            <span class="step-num">4</span>
+                            <span>Factor: (t - 2)(t - 6) = 0 → t = <strong>2s</strong> and <strong>6s</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="insight-panel">
+                    <h3>💡 Key Insight</h3>
+                    <p><strong>Two Solutions Meaning:</strong></p>
+                    <ul class="insight-list">
+                        <li>t₁ = 2s → Stone passes 58.8m <strong>going up</strong></li>
+                        <li>t₂ = 6s → Stone passes 58.8m <strong>coming down</strong></li>
+                    </ul>
+                    <div class="insight-formula">
+                        Δt = t₂ - t₁ = 6 - 2 = 4 seconds
+                    </div>
+                </div>
+
+                <!-- Height Comparison -->
+                <div class="height-panel">
+                    <h3>📏 Height Comparison</h3>
+                    <div class="height-comparison">
+                        <div class="height-item">
+                            <span class="height-value" id="current-height-display">0 m</span>
+                            <span class="height-label">Current</span>
+                        </div>
+                        <div class="height-item target">
+                            <span class="height-value">58.8 m</span>
+                            <span class="height-label">Target</span>
+                        </div>
+                        <div class="height-item max">
+                            <span class="height-value">78.4 m</span>
+                            <span class="height-label">Maximum</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Two Passes Through Same Height | Answer: Δt = 4 seconds</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
