@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earth Rotation & Apparent Gravity - Physics Animation</title>
+    <meta name="description" content="Find angular velocity where apparent gravity becomes zero">
+    <!-- Load MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .menu-btn {
+            position: absolute;
+            left: 2rem;
+            top: 2rem;
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border: 1px solid #60a5fa;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .menu-btn:hover {
+            background: #60a5fa;
+            color: #000;
+        }
+
+        h1 {
+            color: #60a5fa;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-size: 1.2rem;
+        }
+
+        .problem-statement {
+            background-color: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3b82f6;
+        }
+
+        .problem-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .math-equation {
+            background-color: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Cambria Math', serif;
+            font-size: 1.3rem;
+            text-align: center;
+            margin: 15px 0;
+            border: 1px solid #334155;
+            color: #60a5fa;
+        }
+
+        .animation-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .visualization-container {
+            flex: 2;
+            min-width: 300px;
+            background-color: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        #earthCanvas {
+            width: 100%;
+            height: 500px;
+            background-color: #0f172a;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .controls-panel {
+            flex: 1;
+            min-width: 300px;
+            background-color: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .control-group {
+            margin-bottom: 25px;
+        }
+
+        .control-title {
+            font-size: 1.2rem;
+            color: #60a5fa;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .control-title i {
+            margin-right: 10px;
+        }
+
+        .slider-container {
+            margin-bottom: 25px;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .slider-value {
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #334155;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #3b82f6;
+            cursor: pointer;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        #playBtn {
+            background-color: #10b981;
+            color: white;
+        }
+
+        #resetBtn {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .data-panel {
+            background-color: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .data-item {
+            background-color: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .data-label {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
+        }
+
+        .data-value {
+            font-size: 1.5rem;
+            color: #60a5fa;
+            font-weight: bold;
+        }
+
+        .critical-value {
+            color: #10b981;
+            font-size: 1.8rem;
+        }
+
+        .explanation {
+            background-color: #1e293b;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .explanation h3 {
+            color: #60a5fa;
+            margin-bottom: 15px;
+        }
+
+        .explanation p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .key-point {
+            background-color: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #10b981;
+        }
+
+        .derivation {
+            background-color: #0f172a;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #334155;
+            font-family: 'Cambria Math', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .option {
+            background-color: #334155;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option:hover {
+            background-color: #475569;
+        }
+
+        .option.correct {
+            background-color: #10b981;
+            color: white;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .animation-section {
+                flex-direction: column;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            #earthCanvas {
+                height: 400px;
+            }
+
+            .answer-options {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-btn {
+                position: static;
+                margin-bottom: 1rem;
+                display: inline-block;
+            }
+        }
+
+        /* MathJax styling */
+        mjx-container[jax="CHTML"] {
+            text-align: center !important;
+            margin: 0 auto !important;
+        }
+
+        .math-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🌍 Earth Rotation & Apparent Gravity</h1>
+            <p class="subtitle">Finding angular velocity where gravity becomes zero at a given latitude</p>
+        </header>
+
+        <div class="problem-statement">
+            <p class="problem-text"><strong>Problem:</strong> The angular velocity of the earth with which it has to
+                rotate so that the acceleration due to gravity on 60° latitude becomes zero.</p>
+
+            <div class="answer-options" id="answerOptions">
+                <div class="option" data-value="1">
+                    \[ \frac{3\sqrt{\frac{g_p}{R}}}{\sqrt{\frac{g_p}{R}}} \]
+                </div>
+                <div class="option" data-value="2">
+                    \[ 4\sqrt{\frac{g_p}{R}} \]
+                </div>
+                <div class="option correct" data-value="3">
+                    \[ \sqrt{\frac{g_p}{R}} \]
+                </div>
+                <div class="option" data-value="4">
+                    \[ \sqrt{\frac{2g_p}{R}} \]
+                </div>
+            </div>
+
+            <div class="math-equation math-display">
+                \[ g_{\text{apparent}} = g_{\text{true}} - \omega^2 R \cos^2\phi \]
+            </div>
+            <p class="problem-text">Use the simulation below to explore how Earth's rotation affects apparent gravity at
+                different latitudes.</p>
+        </div>
+
+        <div class="animation-section">
+            <div class="visualization-container">
+                <canvas id="earthCanvas" width="800" height="500"></canvas>
+            </div>
+
+            <div class="controls-panel">
+                <div class="control-group">
+                    <div class="control-title">
+                        <span>Angular Velocity (ω)</span>
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Adjust ω: </span>
+                            <span class="slider-value" id="omegaValue">7.27×10⁻⁵ rad/s</span>
+                        </div>
+                        <input type="range" id="omegaSlider" min="0" max="500" value="100" step="1">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-top: 5px;">
+                            <span>0 (No rotation)</span>
+                            <span>Earth's actual ω</span>
+                            <span>Critical ω (g=0)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-title">
+                        <span>Latitude (φ)</span>
+                    </div>
+                    <div class="slider-container">
+                        <div class="slider-label">
+                            <span>Select latitude: </span>
+                            <span class="slider-value" id="latitudeValue">60°</span>
+                        </div>
+                        <input type="range" id="latitudeSlider" min="0" max="90" value="60" step="1">
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.8rem; color: #94a3b8; margin-top: 5px;">
+                            <span>0° (Equator)</span>
+                            <span>30°</span>
+                            <span>60°</span>
+                            <span>90° (Poles)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <div class="control-title">
+                        <span>Earth Parameters</span>
+                    </div>
+                    <div style="color: #94a3b8; line-height: 1.6;">
+                        <p>Earth radius: \( R = 6.371 \times 10^6 \, \text{m} \)</p>
+                        <p>True gravity: \( g = 9.8 \, \text{m/s}^2 \)</p>
+                        <p>Current \( \omega_0 = 7.27 \times 10^{-5} \, \text{rad/s} \)</p>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn" id="playBtn">Auto-Find Critical ω</button>
+                    <button class="action-btn" id="resetBtn">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-panel">
+            <div class="data-grid">
+                <div class="data-item">
+                    <div class="data-label">Selected Latitude (φ)</div>
+                    <div class="data-value" id="currentLatitude">60°</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Angular Velocity (ω)</div>
+                    <div class="data-value" id="currentOmega">7.27×10⁻⁵ rad/s</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">True Gravity (g)</div>
+                    <div class="data-value" id="trueGravity">9.80 m/s²</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Centrifugal Acceleration</div>
+                    <div class="data-value" id="centrifugalAcc">0.00 m/s²</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Apparent Gravity</div>
+                    <div class="data-value" id="apparentGravity">9.80 m/s²</div>
+                </div>
+                <div class="data-item">
+                    <div class="data-label">Condition: \( g_{\text{apparent}} = 0 \)?</div>
+                    <div class="data-value critical-value" id="conditionStatus">NO</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="explanation">
+            <h3>Physics Derivation</h3>
+
+            <div class="derivation math-display">
+                <p><strong>Apparent gravity at latitude φ:</strong></p>
+                <p>\[ g_{\text{apparent}} = g_{\text{true}} - \omega^2 R \cos^2\phi \]</p>
+
+                <p><strong>Setting \( g_{\text{apparent}} = 0 \):</strong></p>
+                <p>\[ 0 = g_{\text{true}} - \omega^2 R \cos^2\phi \]</p>
+                <p>\[ \omega^2 R \cos^2\phi = g_{\text{true}} \]</p>
+                <p>\[ \omega^2 = \frac{g_{\text{true}}}{R \cos^2\phi} \]</p>
+                <p>\[ \omega = \sqrt{\frac{g_{\text{true}}}{R \cos^2\phi}} \]</p>
+
+                <p><strong>For latitude φ = 60°:</strong></p>
+                <p>\[ \cos 60° = \frac{1}{2}, \quad \cos^2 60° = \frac{1}{4} \]</p>
+                <p>\[ \omega = \sqrt{\frac{g_{\text{true}}}{R \cdot \frac{1}{4}}} = \sqrt{\frac{4g_{\text{true}}}{R}} =
+                    2\sqrt{\frac{g_{\text{true}}}{R}} \]</p>
+
+                <p><strong>For the equator (φ = 0°):</strong></p>
+                <p>\[ \cos 0° = 1, \quad \cos^2 0° = 1 \]</p>
+                <p>\[ \omega = \sqrt{\frac{g_{\text{true}}}{R}} \]</p>
+
+                <p><strong>Important Note:</strong> The problem likely contains a typo.
+                    For 90° latitude (poles), \( \cos 90° = 0 \), so \( g_{\text{apparent}} = g_{\text{true}} \) always
+                    (never zero).</p>
+            </div>
+
+            <div class="key-point">
+                <h4>Solution Analysis:</h4>
+                <p>Examining the answer choices:</p>
+                <ol style="margin-left: 20px; margin-top: 10px;">
+                    <li>\[ \frac{3\sqrt{\frac{g_p}{R}}}{\sqrt{\frac{g_p}{R}}} = 3 \] (This is just a constant, not
+                        dimensionally correct)</li>
+                    <li>\[ 4\sqrt{\frac{g_p}{R}} \] (Too large, corresponds to a different latitude)</li>
+                    <li>\[ \sqrt{\frac{g_p}{R}} \] (Correct for equator, φ = 0°)</li>
+                    <li>\[ \sqrt{\frac{2g_p}{R}} \] (Would correspond to φ = 45° where \( \cos^2 45° = \frac{1}{2} \))
+                    </li>
+                </ol>
+                <p style="margin-top: 10px;"><strong>Correct Answer:</strong> Option 3 \[ \sqrt{\frac{g_p}{R}} \]
+                    corresponds to the equator (φ = 0°), not 90° latitude.</p>
+            </div>
+
+            <h3>Simulation Instructions</h3>
+            <p>1. Use the latitude slider to select different positions on Earth (0° = equator, 90° = poles).</p>
+            <p>2. Adjust the angular velocity slider to see how rotation affects apparent gravity.</p>
+            <p>3. Click "Auto-Find Critical ω" to automatically find the angular velocity where apparent gravity becomes
+                zero for the selected latitude.</p>
+            <p>4. Notice that at the poles (90° latitude), apparent gravity never becomes zero because the centrifugal
+                force is zero there.</p>
+
+            <div class="key-point" style="margin-top: 20px;">
+                <h4>Key Observation:</h4>
+                <p>When you set latitude to 0° (equator) in the simulation and find the critical ω where \(
+                    g_{\text{apparent}} = 0 \), you'll get:</p>
+                <p>\[ \omega_{\text{critical}} = \sqrt{\frac{g}{R}} \approx \sqrt{\frac{9.8}{6.371 \times 10^6}} \approx
+                    1.24 \times 10^{-3} \, \text{rad/s} \]</p>
+                <p>This is about 17 times faster than Earth's current rotation rate!</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Earth Rotation Physics Simulation | Apparent Gravity Visualization | ω = √(g/R) for weightlessness at
+                equator</p>
+        </footer>
+    </div>
+
+    <script>
+        // Get DOM elements
+        const canvas = document.getElementById('earthCanvas');
+        const ctx = canvas.getContext('2d');
+        const omegaSlider = document.getElementById('omegaSlider');
+        const omegaValue = document.getElementById('omegaValue');
+        const latitudeSlider = document.getElementById('latitudeSlider');
+        const latitudeValue = document.getElementById('latitudeValue');
+        const playBtn = document.getElementById('playBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const answerOptions = document.querySelectorAll('.option');
+
+        // Data display elements
+        const currentLatitudeElem = document.getElementById('currentLatitude');
+        const currentOmegaElem = document.getElementById('currentOmega');
+        const trueGravityElem = document.getElementById('trueGravity');
+        const centrifugalAccElem = document.getElementById('centrifugalAcc');
+        const apparentGravityElem = document.getElementById('apparentGravity');
+        const conditionStatusElem = document.getElementById('conditionStatus');
+
+        // Constants
+        const R = 6.371e6; // Earth radius in meters
+        const g_true = 9.8; // True gravity m/s²
+        const omega_earth = 7.27e-5; // Earth's actual angular velocity rad/s
+
+        // Simulation parameters
+        let omega = omega_earth; // Current angular velocity
+        let latitude = 60; // Current latitude in degrees
+        let animationId = null;
+        let isAutoFinding = false;
+        let earthRotationAngle = 0;
+
+        // Initialize canvas size
+        function resizeCanvas() {
+            const container = canvas.parentElement;
+            canvas.width = container.clientWidth;
+            canvas.height = 500;
+            drawEarth();
+        }
+
+        // Convert degrees to radians
+        function toRadians(degrees) {
+            return degrees * Math.PI / 180;
+        }
+
+        // Physics calculations
+        function calculateForces() {
+            const phi = toRadians(latitude);
+            const centrifugal = omega * omega * R * Math.cos(phi) * Math.cos(phi);
+            const apparent = g_true - centrifugal;
+
+            return {
+                trueGravity: g_true,
+                centrifugal: centrifugal,
+                apparent: apparent,
+                isZero: Math.abs(apparent) < 0.01
+            };
+        }
+
+        // Update data display
+        function updateDataDisplay() {
+            const forces = calculateForces();
+
+            // Format values nicely
+            const formatScientific = (value) => {
+                if (value === 0) return "0.00";
+                if (Math.abs(value) < 0.01) {
+                    return value.toExponential(2);
+                }
+                return value.toFixed(2);
+            };
+
+            currentLatitudeElem.textContent = `${latitude}°`;
+            currentOmegaElem.textContent = `${formatScientific(omega)} rad/s`;
+            trueGravityElem.textContent = `${forces.trueGravity.toFixed(2)} m/s²`;
+            centrifugalAccElem.textContent = `${formatScientific(forces.centrifugal)} m/s²`;
+            apparentGravityElem.textContent = `${formatScientific(forces.apparent)} m/s²`;
+
+            if (forces.isZero) {
+                conditionStatusElem.textContent = "YES!";
+                conditionStatusElem.style.color = "#10b981";
+            } else if (forces.apparent < 0) {
+                conditionStatusElem.textContent = "NO (negative)";
+                conditionStatusElem.style.color = "#ef4444";
+            } else {
+                conditionStatusElem.textContent = "NO";
+                conditionStatusElem.style.color = "#f59e0b";
+            }
+        }
+
+        // Draw Earth visualization
+        function drawEarth() {
+            const width = canvas.width;
+            const height = canvas.height;
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const earthRadius = Math.min(width, height) * 0.35;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw space background
+            const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, earthRadius * 2);
+            gradient.addColorStop(0, '#0f172a');
+            gradient.addColorStop(1, '#1e293b');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw stars
+            ctx.fillStyle = '#ffffff';
+            for (let i = 0; i < 50; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() * height;
+                const size = Math.random() * 2;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Draw Earth
+            ctx.save();
+
+            // Rotate Earth
+            ctx.translate(centerX, centerY);
+            ctx.rotate(earthRotationAngle);
+
+            // Draw Earth sphere
+            const earthGradient = ctx.createRadialGradient(-earthRadius / 3, -earthRadius / 3, 0, 0, 0, earthRadius);
+            earthGradient.addColorStop(0, '#1d4ed8');
+            earthGradient.addColorStop(0.7, '#1e40af');
+            earthGradient.addColorStop(1, '#1e3a8a');
+
+            ctx.fillStyle = earthGradient;
+            ctx.beginPath();
+            ctx.arc(0, 0, earthRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw latitude lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.lineWidth = 1;
+
+            // Equator (0°)
+            ctx.beginPath();
+            ctx.arc(0, 0, earthRadius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // 30° and 60° latitudes
+            for (let lat of [30, 60]) {
+                const radius = earthRadius * Math.cos(toRadians(lat));
+                ctx.beginPath();
+                ctx.arc(0, 0, radius, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // Label latitude
+                ctx.save();
+                ctx.rotate(-earthRotationAngle);
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '14px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`${lat}°`, radius + 20, 0);
+                ctx.restore();
+            }
+
+            // Draw rotation axis
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, -earthRadius * 1.2);
+            ctx.lineTo(0, earthRadius * 1.2);
+            ctx.stroke();
+
+            // Draw axis labels
+            ctx.save();
+            ctx.rotate(-earthRotationAngle);
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('N', 0, -earthRadius * 1.3);
+            ctx.fillText('S', 0, earthRadius * 1.3);
+            ctx.restore();
+
+            // Mark selected latitude
+            const phi = toRadians(latitude);
+            const latRadius = earthRadius * Math.cos(phi);
+            const latY = earthRadius * Math.sin(phi) * (phi <= Math.PI / 2 ? 1 : -1);
+
+            ctx.fillStyle = '#10b981';
+            ctx.beginPath();
+            ctx.arc(0, -latY, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw label for selected latitude
+            ctx.save();
+            ctx.rotate(-earthRotationAngle);
+            ctx.fillStyle = '#10b981';
+            ctx.font = 'bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(`Selected: ${latitude}°`, 0, -earthRadius * 1.5);
+            ctx.restore();
+
+            // Draw force vectors at selected latitude
+            const forces = calculateForces();
+            const vectorScale = 1000; // Scale for visualization
+
+            // True gravity vector (downward)
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, -latY);
+            ctx.lineTo(0, -latY + forces.trueGravity * vectorScale);
+            ctx.stroke();
+
+            // Centrifugal force vector (outward, perpendicular to axis)
+            const centrifugalX = latRadius * omega * omega * vectorScale * 1e9;
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, -latY);
+            ctx.lineTo(centrifugalX, -latY);
+            ctx.stroke();
+
+            // Apparent gravity (resultant)
+            ctx.strokeStyle = '#10b981';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, -latY);
+            ctx.lineTo(centrifugalX, -latY + forces.trueGravity * vectorScale);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw vector labels
+            ctx.save();
+            ctx.rotate(-earthRotationAngle);
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'left';
+
+            ctx.fillStyle = '#3b82f6';
+            ctx.fillText('True Gravity (g)', 10, -latY + forces.trueGravity * vectorScale / 2);
+
+            ctx.fillStyle = '#ef4444';
+            ctx.fillText('Centrifugal Force', centrifugalX / 2, -latY - 20);
+
+            ctx.fillStyle = '#10b981';
+            ctx.fillText('Apparent Gravity', centrifugalX / 2, -latY + forces.trueGravity * vectorScale / 2);
+
+            ctx.restore();
+
+            ctx.restore(); // Restore from Earth rotation
+
+            // Draw info box
+            const forcesInfo = calculateForces();
+            ctx.fillStyle = 'rgba(30, 41, 59, 0.9)';
+            ctx.fillRect(20, 20, 300, 150);
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(20, 20, 300, 150);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText('Force Analysis', 40, 50);
+
+            ctx.font = '14px Arial';
+            ctx.fillText(`Latitude: ${latitude}°`, 40, 80);
+            ctx.fillText(`Angular velocity: ${omega.toExponential(2)} rad/s`, 40, 105);
+            ctx.fillText(`Centrifugal acc: ${forcesInfo.centrifugal.toExponential(2)} m/s²`, 40, 130);
+            ctx.fillText(`Apparent gravity: ${forcesInfo.apparent.toExponential(2)} m/s²`, 40, 155);
+
+            // Draw critical omega value
+            const phiRad = toRadians(latitude);
+            const criticalOmega = Math.sqrt(g_true / (R * Math.cos(phiRad) * Math.cos(phiRad)));
+
+            ctx.fillStyle = forcesInfo.isZero ? '#10b981' : '#f59e0b';
+            ctx.font = 'bold 16px Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText(`Critical ω: ${criticalOmega.toExponential(2)} rad/s`, width - 20, height - 20);
+
+            // Draw rotation speed indicator
+            const rotationIndicatorWidth = 200;
+            const rotationX = width - rotationIndicatorWidth - 20;
+            const rotationY = 20;
+
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(rotationX, rotationY, rotationIndicatorWidth, 30);
+
+            const rotationFillWidth = (omega / (criticalOmega * 1.2)) * rotationIndicatorWidth;
+            ctx.fillStyle = forcesInfo.isZero ? '#10b981' : '#3b82f6';
+            ctx.fillRect(rotationX, rotationY, Math.min(rotationFillWidth, rotationIndicatorWidth), 30);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Rotation Speed', rotationX + rotationIndicatorWidth / 2, rotationY - 5);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText(`${(omega / omega_earth).toFixed(1)} × Earth's rotation`, rotationX + rotationIndicatorWidth / 2, rotationY + 20);
+        }
+
+        // Update omega value
+        function updateOmega(newOmega) {
+            // Convert slider value (0-500) to omega
+            // 100 = Earth's actual omega
+            omega = (newOmega / 100) * omega_earth;
+
+            // For values > 300, show critical region
+            if (newOmega > 300) {
+                const phi = toRadians(latitude);
+                const criticalOmega = Math.sqrt(g_true / (R * Math.cos(phi) * Math.cos(phi)));
+                omega = criticalOmega * (newOmega - 300) / 200;
+            }
+
+            omegaValue.textContent = `${omega.toExponential(2)} rad/s`;
+            currentOmegaElem.textContent = `${omega.toExponential(2)} rad/s`;
+
+            drawEarth();
+            updateDataDisplay();
+        }
+
+        // Update latitude
+        function updateLatitude(newLatitude) {
+            latitude = newLatitude;
+            latitudeValue.textContent = `${latitude}°`;
+            currentLatitudeElem.textContent = `${latitude}°`;
+
+            drawEarth();
+            updateDataDisplay();
+        }
+
+        // Auto-find critical omega
+        function autoFindCriticalOmega() {
+            if (isAutoFinding) {
+                isAutoFinding = false;
+                playBtn.textContent = "Auto-Find Critical ω";
+                cancelAnimationFrame(animationId);
+                return;
+            }
+
+            // Check if at poles
+            if (latitude === 90) {
+                alert('At 90° latitude (poles), apparent gravity cannot become zero from rotation alone! cos²(90°) = 0');
+                return;
+            }
+
+            isAutoFinding = true;
+            playBtn.textContent = "Stop";
+
+            const phi = toRadians(latitude);
+            const criticalOmega = Math.sqrt(g_true / (R * Math.cos(phi) * Math.cos(phi)));
+
+            let currentOmega = omega;
+            const step = (criticalOmega - currentOmega) / 100;
+            let stepCount = 0;
+
+            function animateToCritical() {
+                if (stepCount < 100 && isAutoFinding) {
+                    currentOmega += step;
+                    updateOmega((currentOmega / omega_earth) * 100);
+                    omegaSlider.value = (currentOmega / omega_earth) * 100;
+                    stepCount++;
+                    animationId = requestAnimationFrame(animateToCritical);
+                } else {
+                    isAutoFinding = false;
+                    playBtn.textContent = "Auto-Find Critical ω";
+                }
+            }
+
+            animateToCritical();
+        }
+
+        // Reset to Earth's actual values
+        function resetSimulation() {
+            omegaSlider.value = 100; // Earth's actual omega
+            latitudeSlider.value = 60;
+            updateOmega(100);
+            updateLatitude(60);
+
+            if (isAutoFinding) {
+                isAutoFinding = false;
+                playBtn.textContent = "Auto-Find Critical ω";
+                cancelAnimationFrame(animationId);
+            }
+        }
+
+        // Animation loop for Earth rotation
+        function animateEarthRotation() {
+            earthRotationAngle += omega * 0.1; // Scale for visualization
+            drawEarth();
+            requestAnimationFrame(animateEarthRotation);
+        }
+
+        // Event listeners
+        omegaSlider.addEventListener('input', function () {
+            updateOmega(parseInt(this.value));
+        });
+
+        latitudeSlider.addEventListener('input', function () {
+            updateLatitude(parseInt(this.value));
+        });
+
+        playBtn.addEventListener('click', autoFindCriticalOmega);
+        resetBtn.addEventListener('click', resetSimulation);
+
+        answerOptions.forEach(option => {
+            option.addEventListener('click', function () {
+                answerOptions.forEach(opt => opt.classList.remove('correct'));
+                this.classList.add('correct');
+            });
+        });
+
+        // Window resize handler
+        window.addEventListener('resize', resizeCanvas);
+
+        // Initialize MathJax callback
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                ignoreHtmlClass: 'tex2jax_ignore',
+                processHtmlClass: 'tex2jax_process'
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady().then(() => {
+                        // Initialize simulation after MathJax is ready
+                        resizeCanvas();
+                        updateOmega(100);
+                        updateLatitude(60);
+                        animateEarthRotation();
+                    });
+                }
+            }
+        };
+
+        // Draw initial scene
+        drawEarth();
+        updateDataDisplay();
+    </script>
+</body>
+
+</html>
