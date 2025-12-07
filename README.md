@@ -27,6 +27,6 @@ uv run app.py
 ```
 
 git add .
-git commit -m "Gravitation - Add Wave Speed in Accelerating Car"
+git commit -m "Keratio - Add KE Ratio in Projectile Motion"
 git push -u origin main
 git status

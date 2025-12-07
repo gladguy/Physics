@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projectile Motion: Kinetic Energy Ratio - Physics Animation</title>
+    <meta name="description" content="Projectile motion - find angle when KE at highest point is 3/4 of initial KE">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🎯 Projectile Motion: KE Ratio</h1>
+            <p class="subtitle">KE at highest point = ¾ × Initial KE | Find projection angle θ</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="sky"></div>
+                    <div class="ground"></div>
+                    <div class="highest-line" id="highest-line">
+                        <span class="height-label">Highest Point (v_y = 0)</span>
+                    </div>
+                    <div class="trajectory" id="trajectory"></div>
+                    <div class="projectile" id="projectile">
+                        <div class="velocity-arrow" id="velocity-arrow"></div>
+                        <div class="vx-arrow" id="vx-arrow"></div>
+                        <div class="vy-arrow" id="vy-arrow"></div>
+                    </div>
+                    <div class="launcher" id="launcher">
+                        <div class="angle-arc" id="angle-arc"></div>
+                        <span class="angle-label" id="angle-label">θ = 30°</span>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <div class="slider-group">
+                        <label>Projection Angle θ:</label>
+                        <input type="range" id="angle-slider" min="0" max="90" value="30">
+                        <span class="slider-value" id="angle-value">30°</span>
+                    </div>
+                    <div class="button-group">
+                        <button id="play-btn" class="control-btn primary">
+                            <span class="icon">▶</span> Launch
+                        </button>
+                        <button id="reset-btn" class="control-btn">
+                            <span class="icon">↺</span> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Energy Comparison -->
+                <div class="energy-panel">
+                    <div class="energy-card initial">
+                        <div class="energy-title">Initial KE</div>
+                        <div class="energy-formula">½mv²</div>
+                        <div class="energy-bar">
+                            <div class="bar-fill initial-fill" style="width: 100%"></div>
+                        </div>
+                        <div class="energy-percent">100%</div>
+                    </div>
+                    <div class="energy-arrow">→</div>
+                    <div class="energy-card highest">
+                        <div class="energy-title">KE at Highest Point</div>
+                        <div class="energy-formula">½m(v cos θ)²</div>
+                        <div class="energy-bar">
+                            <div class="bar-fill highest-fill" id="ke-bar" style="width: 75%"></div>
+                        </div>
+                        <div class="energy-percent" id="ke-percent">75%</div>
+                    </div>
+                </div>
+
+                <!-- Ratio Display -->
+                <div class="ratio-display">
+                    <div class="ratio-label">KE Ratio = cos²θ =</div>
+                    <div class="ratio-value" id="ratio-value">0.750</div>
+                    <div class="target-indicator" id="target-indicator">
+                        <span class="target-label">Target: ¾ = 0.75</span>
+                        <span class="match-status" id="match-status">✓ Match!</span>
+                    </div>
+                </div>
+
+                <!-- Velocity Decomposition -->
+                <div class="velocity-panel">
+                    <div class="velocity-item">
+                        <div class="vel-color vx-color"></div>
+                        <div class="vel-info">
+                            <span class="vel-name">Horizontal v_x</span>
+                            <span class="vel-formula">= v cos θ</span>
+                            <span class="vel-value" id="vx-value">= 0.866v</span>
+                        </div>
+                        <div class="vel-note">Constant throughout flight</div>
+                    </div>
+                    <div class="velocity-item">
+                        <div class="vel-color vy-color"></div>
+                        <div class="vel-info">
+                            <span class="vel-name">Vertical v_y</span>
+                            <span class="vel-formula">= v sin θ - gt</span>
+                            <span class="vel-value" id="vy-value">= 0.500v (initial)</span>
+                        </div>
+                        <div class="vel-note">Zero at highest point!</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Question Box -->
+                <div class="question-box">
+                    <h3>📋 Question</h3>
+                    <p>The kinetic energy of a projectile at the <strong>highest point</strong>
+                        is found to be <strong>3/4 of its initial KE</strong>.</p>
+                    <p class="question-highlight">Find the angle of projection θ.</p>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">0°</button>
+                        <button class="quiz-option" data-answer="correct">30°</button>
+                        <button class="quiz-option" data-answer="wrong">60°</button>
+                        <button class="quiz-option" data-answer="wrong">45°</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">Projection Angle θ =</span>
+                        <span class="result-value success">30°</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="calc-panel">
+                    <h3>📊 Derivation</h3>
+                    <div class="calc-steps">
+                        <div class="calc-step">
+                            <span class="step-num">1</span>
+                            <span>At highest point, v_y = 0</span>
+                            <div class="formula">Velocity = v_x = v cos θ</div>
+                        </div>
+                        <div class="calc-step">
+                            <span class="step-num">2</span>
+                            <span>KE at highest point:</span>
+                            <div class="formula">KE_h = ½m(v cos θ)²</div>
+                        </div>
+                        <div class="calc-step highlight">
+                            <span class="step-num">3</span>
+                            <span>Given KE_h / KE_i = 3/4:</span>
+                            <div class="formula">cos²θ = 3/4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution -->
+                <div class="insight-panel">
+                    <h3>💡 Solution</h3>
+                    <div class="solution-steps">
+                        <div class="formula">cos²θ = 3/4</div>
+                        <div class="formula">cos θ = √(3/4) = √3/2</div>
+                        <div class="formula">θ = cos⁻¹(√3/2)</div>
+                    </div>
+                    <div class="insight-formula">
+                        θ = 30°
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="physics-panel">
+                    <h3>⚡ Key Insight</h3>
+                    <ul class="physics-list">
+                        <li><strong>Only horizontal KE remains</strong> at highest point</li>
+                        <li>Vertical KE converts to potential energy</li>
+                        <li>KE ratio = cos²θ (always!)</li>
+                    </ul>
+                    <div class="physics-highlight">
+                        cos 30° = √3/2 ≈ 0.866
+                        <br>
+                        (0.866)² = 0.75 = 3/4 ✓
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Projectile Motion: KE Ratio | Answer: θ = 30° (cos²30° = 3/4)</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
