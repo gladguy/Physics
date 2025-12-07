@@ -94,13 +94,15 @@ class WaveSpeedSimulation {
         // Pendulum at rest - vertical
         this.stringRest.style.transform = 'translateX(-50%)';
 
-        // Pendulum accelerating - tilted backward
+        // Pendulum accelerating - tilted BACKWARD (to the left when car accelerates right)
+        // Negative angle because pendulum swings opposite to acceleration direction
         const thetaDeg = this.theta * 180 / Math.PI;
-        this.stringAccel.style.transform = `translateX(-50%) rotate(${thetaDeg}deg)`;
+        this.stringAccel.style.transform = `translateX(-50%) rotate(${-thetaDeg}deg)`;
 
         // Update ball position for accelerating pendulum
+        // Ball moves to the LEFT (backward) when car accelerates right
         const stringLength = 80;
-        const offsetX = stringLength * Math.sin(this.theta);
+        const offsetX = -stringLength * Math.sin(this.theta); // Negative for backward tilt
         const offsetY = stringLength * Math.cos(this.theta);
 
         this.ballAccel.style.top = `${offsetY}px`;
