@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maximum Height from Half-Height Velocity - Physics Animation</title>
+    <meta name="description" content="Find maximum height when velocity at H/2 is 9.8 m/s">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🚀 Maximum Height Problem</h1>
+            <p class="subtitle">v = 9.8 m/s at half max height | Find H_max</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="height-scale">
+                        <div class="scale-mark" style="bottom: 100%;">
+                            <span class="scale-label">H = 9.8 m</span>
+                            <div class="scale-line max-line"></div>
+                        </div>
+                        <div class="scale-mark" style="bottom: 50%;">
+                            <span class="scale-label">H/2 = 4.9 m</span>
+                            <div class="scale-line half-line"></div>
+                        </div>
+                        <div class="scale-mark" style="bottom: 0;">
+                            <span class="scale-label">Ground</span>
+                            <div class="scale-line ground-line"></div>
+                        </div>
+                    </div>
+                    <div class="trajectory-container">
+                        <div class="projectile" id="projectile">
+                            <div class="velocity-arrow" id="velocity-arrow"></div>
+                            <div class="velocity-label" id="velocity-label">13.86 m/s</div>
+                        </div>
+                        <div class="half-marker" id="half-marker">
+                            <span>v = 9.8 m/s</span>
+                        </div>
+                        <div class="max-marker" id="max-marker">
+                            <span>v = 0</span>
+                        </div>
+                    </div>
+                    <div class="ground"></div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="play-btn" class="control-btn primary">
+                        <span class="icon">▶</span> Launch
+                    </button>
+                    <button id="reset-btn" class="control-btn">
+                        <span class="icon">↺</span> Reset
+                    </button>
+                </div>
+
+                <!-- Real-time Data -->
+                <div class="data-panel">
+                    <div class="data-item">
+                        <span class="data-label">Height</span>
+                        <span class="data-value" id="height-display">0.00 m</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Velocity</span>
+                        <span class="data-value" id="velocity-display">13.86 m/s</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Time</span>
+                        <span class="data-value" id="time-display">0.00 s</span>
+                    </div>
+                    <div class="data-item highlight" id="phase-display">
+                        <span class="data-label">Phase</span>
+                        <span class="data-value">Ready</span>
+                    </div>
+                </div>
+
+                <!-- Physics Values -->
+                <div class="physics-values">
+                    <div class="physics-item">
+                        <div class="physics-label">Initial u</div>
+                        <div class="physics-value">13.86 m/s</div>
+                    </div>
+                    <div class="physics-item highlight">
+                        <div class="physics-label">H_max</div>
+                        <div class="physics-value success">9.8 m</div>
+                    </div>
+                    <div class="physics-item">
+                        <div class="physics-label">v at H/2</div>
+                        <div class="physics-value">9.8 m/s</div>
+                    </div>
+                    <div class="physics-item">
+                        <div class="physics-label">Time to peak</div>
+                        <div class="physics-value">1.41 s</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Question Box -->
+                <div class="question-box">
+                    <h3>📋 Problem</h3>
+                    <p>An object projected upward has velocity <strong>9.8 m/s</strong> at <strong>half the maximum
+                            height</strong>.</p>
+                    <p>Find the <strong>maximum height H</strong> reached.</p>
+                </div>
+
+                <!-- Given Data -->
+                <div class="given-box">
+                    <h3>📝 Given</h3>
+                    <ul>
+                        <li>v at H/2 = <strong>9.8 m/s</strong></li>
+                        <li>g = <strong>9.8 m/s²</strong></li>
+                        <li>v at H_max = <strong>0</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Quiz Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">4.9 m</button>
+                        <button class="quiz-option" data-answer="correct">9.8 m</button>
+                        <button class="quiz-option" data-answer="wrong">14.7 m</button>
+                        <button class="quiz-option" data-answer="wrong">19.6 m</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">Maximum Height H =</span>
+                        <span class="result-value success">9.8 m</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Formulas -->
+                <div class="calc-panel">
+                    <h3>📊 Key Equations</h3>
+                    <div class="calc-steps">
+                        <div class="calc-step">
+                            <span class="step-num">1</span>
+                            <span>At max height (v=0):</span>
+                            <div class="formula">u² = 2gH</div>
+                        </div>
+                        <div class="calc-step">
+                            <span class="step-num">2</span>
+                            <span>At half height:</span>
+                            <div class="formula">v² = u² - 2g(H/2)</div>
+                        </div>
+                        <div class="calc-step highlight">
+                            <span class="step-num">3</span>
+                            <span>Substitute:</span>
+                            <div class="formula">(9.8)² = 2gH - gH = gH</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution -->
+                <div class="insight-panel">
+                    <h3>💡 Solution</h3>
+                    <div class="derivation-steps">
+                        <div class="formula">v² = u² - 2g(H/2)</div>
+                        <div class="formula">(9.8)² = 2gH - gH</div>
+                        <div class="formula">96.04 = gH</div>
+                        <div class="formula">H = 96.04/9.8</div>
+                    </div>
+                    <div class="insight-formula">
+                        H = 9.8 m ✓
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="physics-panel">
+                    <h3>⚡ Key Insight</h3>
+                    <ul class="physics-list">
+                        <li>At H/2: half KE converted to PE</li>
+                        <li>v² at H/2 = u²/2 = gH</li>
+                        <li>Since v = 9.8, H = v²/g = 9.8 m</li>
+                    </ul>
+                    <div class="physics-highlight">
+                        Remarkably: v at H/2 = √(gH) = 9.8 m/s
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Maximum Height Problem | v at H/2 = 9.8 m/s → H = 9.8 m</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
