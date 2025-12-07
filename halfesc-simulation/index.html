@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite with Half Escape Speed - Physics Animation</title>
+    <meta name="description" content="Satellite orbits with speed = ½ escape speed. Find height above Earth.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🛰️ Satellite with Half Escape Speed</h1>
+            <p class="subtitle">v_orbital = ½ × v_escape | Find height h above Earth's surface</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="stars"></div>
+                    <div class="orbit-path" id="orbit-path"></div>
+                    <div class="earth" id="earth">
+                        <div class="earth-glow"></div>
+                    </div>
+                    <div class="satellite" id="satellite">
+                        <div class="velocity-arrow" id="velocity-arrow"></div>
+                    </div>
+                    <div class="radius-indicator" id="radius-indicator">
+                        <div class="radius-line earth-radius"></div>
+                        <div class="radius-label" id="radius-label-r">R</div>
+                        <div class="radius-line height-line" id="height-line"></div>
+                        <div class="radius-label" id="radius-label-h">h = R</div>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="play-btn" class="control-btn primary">
+                        <span class="icon">▶</span> Start Orbit
+                    </button>
+                    <button id="reset-btn" class="control-btn">
+                        <span class="icon">↺</span> Reset
+                    </button>
+                </div>
+
+                <!-- Speed Comparison -->
+                <div class="speed-panel">
+                    <div class="speed-card">
+                        <div class="speed-title">Escape Speed</div>
+                        <div class="speed-formula">v_esc = √(2GM/R)</div>
+                        <div class="speed-value escape-color">11.2 km/s</div>
+                    </div>
+                    <div class="speed-relation">
+                        <div class="relation-symbol">÷2</div>
+                        <div class="relation-arrow">→</div>
+                    </div>
+                    <div class="speed-card highlight">
+                        <div class="speed-title">Orbital Speed</div>
+                        <div class="speed-formula">v_orb = √(GM/r)</div>
+                        <div class="speed-value orbital-color">5.6 km/s</div>
+                    </div>
+                </div>
+
+                <!-- Height Display -->
+                <div class="height-panel">
+                    <div class="height-item">
+                        <div class="height-label">Earth Radius</div>
+                        <div class="height-value">R</div>
+                        <div class="height-km">≈ 6,371 km</div>
+                    </div>
+                    <div class="height-operator">+</div>
+                    <div class="height-item highlight">
+                        <div class="height-label">Satellite Height</div>
+                        <div class="height-value success">h = R</div>
+                        <div class="height-km">≈ 6,371 km</div>
+                    </div>
+                    <div class="height-operator">=</div>
+                    <div class="height-item">
+                        <div class="height-label">Orbit Radius</div>
+                        <div class="height-value">r = 2R</div>
+                        <div class="height-km">≈ 12,742 km</div>
+                    </div>
+                </div>
+
+                <!-- Data Grid -->
+                <div class="data-grid">
+                    <div class="data-item">
+                        <span class="data-label">Speed Ratio</span>
+                        <span class="data-value" id="speed-ratio">v/v_esc = 0.5</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Orbit Radius</span>
+                        <span class="data-value" id="orbit-radius">r = 2R</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Height</span>
+                        <span class="data-value" id="height-display">h = R</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Period</span>
+                        <span class="data-value" id="period-display">~3.4 hours</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Question Box -->
+                <div class="question-box">
+                    <h3>📋 Question</h3>
+                    <p>A satellite orbits Earth with speed <strong>v = ½ × v_escape</strong>.</p>
+                    <p>If Earth's radius = <strong>R</strong>, find the satellite's
+                        <strong>height h</strong> above Earth's surface.
+                    </p>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">R/2</button>
+                        <button class="quiz-option" data-answer="wrong">2R/3</button>
+                        <button class="quiz-option" data-answer="correct">R</button>
+                        <button class="quiz-option" data-answer="wrong">2R</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">Height above surface h =</span>
+                        <span class="result-value success">R</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Derivation -->
+                <div class="calc-panel">
+                    <h3>📊 Key Formulas</h3>
+                    <div class="calc-steps">
+                        <div class="calc-step">
+                            <span class="step-num">1</span>
+                            <span>Escape speed:</span>
+                            <div class="formula">v_esc = √(2GM/R)</div>
+                        </div>
+                        <div class="calc-step">
+                            <span class="step-num">2</span>
+                            <span>Orbital speed at radius r:</span>
+                            <div class="formula">v_orb = √(GM/r)</div>
+                        </div>
+                        <div class="calc-step highlight">
+                            <span class="step-num">3</span>
+                            <span>Given condition:</span>
+                            <div class="formula">v_orb = ½ v_esc</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solution -->
+                <div class="insight-panel">
+                    <h3>💡 Derivation</h3>
+                    <div class="derivation-steps">
+                        <div class="formula">√(GM/r) = ½√(2GM/R)</div>
+                        <p>Square both sides:</p>
+                        <div class="formula">GM/r = ¼ × 2GM/R</div>
+                        <div class="formula">1/r = 1/(2R)</div>
+                        <div class="formula">r = 2R</div>
+                    </div>
+                    <div class="insight-formula">
+                        h = r - R = 2R - R = R
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="physics-panel">
+                    <h3>⚡ Key Insight</h3>
+                    <ul class="physics-list">
+                        <li>At <strong>half escape speed</strong>, orbit radius = <strong>2R</strong></li>
+                        <li>Height above surface = <strong>R</strong> (one Earth radius!)</li>
+                        <li>This is about <strong>6,371 km</strong> altitude</li>
+                    </ul>
+                    <div class="physics-highlight">
+                        v_orb/v_esc = ½ → r = 2R → h = R
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Satellite with Half Escape Speed | Answer: h = R (one Earth radius above surface)</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

@@ -27,6 +27,6 @@ uv run app.py
 ```
 
 git add .
-git commit -m "Keratio - Add KE Ratio in Projectile Motion"
+git commit -m "halfesc - Add Satellite with Half Escape Speed"
 git push -u origin main
 git status
