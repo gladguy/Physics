@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earth's Rotation Effect on Gravity - Physics Animation</title>
+    <meta name="description" content="How Earth's rotation affects acceleration due to gravity at different latitudes">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🌍 Earth's Rotation Effect on Gravity</h1>
+            <p class="subtitle">g' = g - ω²R cos²θ | Effect is maximum at equator, zero at poles</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="stars"></div>
+                    <div class="earth" id="earth">
+                        <div class="axis"></div>
+                        <div class="equator-line"></div>
+                        <div class="pole north-pole">N</div>
+                        <div class="pole south-pole">S</div>
+
+                        <!-- Centrifugal force arrows -->
+                        <div class="force-arrow equator-force" id="equator-force">
+                            <span class="force-label">Max F_c</span>
+                        </div>
+                        <div class="force-arrow mid-force" id="mid-force">
+                            <span class="force-label">F_c cos θ</span>
+                        </div>
+                        <div class="force-arrow pole-force" id="pole-force">
+                            <span class="force-label">F_c = 0</span>
+                        </div>
+                    </div>
+                    <div class="rotation-indicator" id="rotation-indicator">
+                        <span>ω</span>
+                    </div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="play-btn" class="control-btn primary">
+                        <span class="icon">▶</span> Start Rotation
+                    </button>
+                    <button id="reset-btn" class="control-btn">
+                        <span class="icon">↺</span> Reset
+                    </button>
+                </div>
+
+                <!-- Gravity Comparison -->
+                <div class="gravity-panel">
+                    <div class="gravity-card pole-gravity">
+                        <div class="gravity-title">At Poles (θ = 90°)</div>
+                        <div class="gravity-formula">g' = g</div>
+                        <div class="gravity-value">9.832 m/s²</div>
+                        <div class="gravity-note">No centrifugal effect!</div>
+                    </div>
+                    <div class="gravity-arrow">←</div>
+                    <div class="gravity-diff">
+                        <div class="diff-label">Difference</div>
+                        <div class="diff-value">0.052 m/s²</div>
+                    </div>
+                    <div class="gravity-arrow">→</div>
+                    <div class="gravity-card equator-gravity">
+                        <div class="gravity-title">At Equator (θ = 0°)</div>
+                        <div class="gravity-formula">g' = g - ω²R</div>
+                        <div class="gravity-value">9.780 m/s²</div>
+                        <div class="gravity-note">Maximum reduction!</div>
+                    </div>
+                </div>
+
+                <!-- Data Grid -->
+                <div class="data-grid">
+                    <div class="data-item">
+                        <span class="data-label">Earth's ω</span>
+                        <span class="data-value">7.29 × 10⁻⁵ rad/s</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Earth Radius</span>
+                        <span class="data-value">6.37 × 10⁶ m</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">ω²R at equator</span>
+                        <span class="data-value">0.034 m/s²</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Variation</span>
+                        <span class="data-value">~0.5%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Statements -->
+                <div class="statement-box true">
+                    <h3>✓ Statement I (TRUE)</h3>
+                    <p>"Rotation of Earth shows effect on the value of g."</p>
+                    <div class="reason">Centrifugal force reduces effective gravity</div>
+                </div>
+
+                <div class="statement-box false">
+                    <h3>✗ Statement II (FALSE)</h3>
+                    <p>"Effect is minimum at equator and maximum at poles."</p>
+                    <div class="reason">Actually OPPOSITE: max at equator, zero at poles!</div>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Correct Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">A) I is false, II is true</button>
+                        <button class="quiz-option" data-answer="correct">B) I is true, II is false</button>
+                        <button class="quiz-option" data-answer="wrong">C) Both are true</button>
+                        <button class="quiz-option" data-answer="wrong">D) Both are false</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">Correct Option:</span>
+                        <span class="result-value success">B</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Formula -->
+                <div class="calc-panel">
+                    <h3>📊 The Formula</h3>
+                    <div class="main-formula">
+                        g' = g - ω²R cos²θ
+                    </div>
+                    <div class="formula-breakdown">
+                        <div class="formula-item">
+                            <span class="var">g'</span> = Effective gravity
+                        </div>
+                        <div class="formula-item">
+                            <span class="var">g</span> = 9.8 m/s² (actual)
+                        </div>
+                        <div class="formula-item">
+                            <span class="var">θ</span> = Latitude angle
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Explanation -->
+                <div class="insight-panel">
+                    <h3>💡 Why This Happens</h3>
+                    <div class="insight-points">
+                        <p>At <strong>Equator</strong> (θ = 0°):</p>
+                        <div class="formula">cos²(0°) = 1 → Max reduction</div>
+                        <p>At <strong>Poles</strong> (θ = 90°):</p>
+                        <div class="formula">cos²(90°) = 0 → No effect</div>
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="physics-panel">
+                    <h3>⚡ Key Insight</h3>
+                    <ul class="physics-list">
+                        <li>Centrifugal force acts <strong>outward from axis</strong></li>
+                        <li>At equator: full centrifugal opposes gravity</li>
+                        <li>At poles: no rotation radius → no centrifugal effect</li>
+                    </ul>
+                    <div class="physics-highlight">
+                        Effect: MAX at Equator, ZERO at Poles
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Earth's Rotation Effect | Answer: Option B (Statement I true, Statement II false)</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
