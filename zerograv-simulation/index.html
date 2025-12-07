@@ -794,67 +794,104 @@
 
             ctx.restore(); // Restore from Earth rotation
 
-            // Draw info box
+            // Draw info box (ensure it stays within canvas)
             const forcesInfo = calculateForces();
-            ctx.fillStyle = 'rgba(30, 41, 59, 0.9)';
-            ctx.fillRect(20, 20, 300, 150);
+            const boxX = 15;
+            const boxY = 15;
+            const boxWidth = 280;
+            const boxHeight = 130;
+
+            ctx.fillStyle = 'rgba(30, 41, 59, 0.95)';
+            ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
             ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 2;
-            ctx.strokeRect(20, 20, 300, 150);
+            ctx.strokeRect(boxX, boxY, boxWidth, boxHeight);
 
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#60a5fa';
+            ctx.font = 'bold 14px Arial';
+            ctx.fillText('Force Analysis', boxX + 10, boxY + 25);
+
+            ctx.font = '13px Arial';
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 16px Arial';
-            ctx.fillText('Force Analysis', 40, 50);
+            ctx.fillText(`Latitude: ${latitude}°`, boxX + 10, boxY + 50);
+            ctx.fillText(`ω: ${omega.toExponential(2)} rad/s`, boxX + 10, boxY + 70);
+            ctx.fillText(`Centrifugal: ${forcesInfo.centrifugal.toFixed(3)} m/s²`, boxX + 10, boxY + 90);
 
-            ctx.font = '14px Arial';
-            ctx.fillText(`Latitude: ${latitude}°`, 40, 80);
-            ctx.fillText(`Angular velocity: ${omega.toExponential(2)} rad/s`, 40, 105);
-            ctx.fillText(`Centrifugal acc: ${forcesInfo.centrifugal.toExponential(2)} m/s²`, 40, 130);
-            ctx.fillText(`Apparent gravity: ${forcesInfo.apparent.toExponential(2)} m/s²`, 40, 155);
+            // Color code apparent gravity
+            if (forcesInfo.isZero) {
+                ctx.fillStyle = '#10b981';
+            } else if (forcesInfo.apparent < 0) {
+                ctx.fillStyle = '#ef4444';
+            } else {
+                ctx.fillStyle = '#ffffff';
+            }
+            ctx.fillText(`Apparent g: ${forcesInfo.apparent.toFixed(3)} m/s²`, boxX + 10, boxY + 110);
 
-            // Draw critical omega value
+            // Draw critical omega value (handle poles case)
             const phiRad = toRadians(latitude);
-            const criticalOmega = Math.sqrt(g_true / (R * Math.cos(phiRad) * Math.cos(phiRad)));
+            const cosPhi = Math.cos(phiRad);
+            let criticalOmegaDisplay;
+            if (cosPhi < 0.01) {
+                criticalOmegaDisplay = "∞ (poles)";
+            } else {
+                const criticalOmega = Math.sqrt(g_true / (R * cosPhi * cosPhi));
+                criticalOmegaDisplay = `${criticalOmega.toExponential(2)} rad/s`;
+            }
 
             ctx.fillStyle = forcesInfo.isZero ? '#10b981' : '#f59e0b';
-            ctx.font = 'bold 16px Arial';
+            ctx.font = 'bold 14px Arial';
             ctx.textAlign = 'right';
-            ctx.fillText(`Critical ω: ${criticalOmega.toExponential(2)} rad/s`, width - 20, height - 20);
+            ctx.fillText(`Critical ω: ${criticalOmegaDisplay}`, width - 15, height - 15);
 
             // Draw rotation speed indicator
-            const rotationIndicatorWidth = 200;
-            const rotationX = width - rotationIndicatorWidth - 20;
-            const rotationY = 20;
+            const rotationIndicatorWidth = 180;
+            const rotationX = width - rotationIndicatorWidth - 15;
+            const rotationY = 15;
 
             ctx.fillStyle = '#334155';
-            ctx.fillRect(rotationX, rotationY, rotationIndicatorWidth, 30);
+            ctx.fillRect(rotationX, rotationY, rotationIndicatorWidth, 28);
 
-            const rotationFillWidth = (omega / (criticalOmega * 1.2)) * rotationIndicatorWidth;
+            // Calculate fill width (cap at 100%)
+            const maxCritical = cosPhi < 0.01 ? 0.002 : Math.sqrt(g_true / (R * cosPhi * cosPhi));
+            const fillRatio = Math.min(omega / (maxCritical * 1.1), 1);
+            const rotationFillWidth = fillRatio * rotationIndicatorWidth;
+
             ctx.fillStyle = forcesInfo.isZero ? '#10b981' : '#3b82f6';
-            ctx.fillRect(rotationX, rotationY, Math.min(rotationFillWidth, rotationIndicatorWidth), 30);
+            ctx.fillRect(rotationX, rotationY, rotationFillWidth, 28);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = '14px Arial';
+            ctx.font = '12px Arial';
             ctx.textAlign = 'center';
             ctx.fillText('Rotation Speed', rotationX + rotationIndicatorWidth / 2, rotationY - 5);
 
             ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 14px Arial';
-            ctx.fillText(`${(omega / omega_earth).toFixed(1)} × Earth's rotation`, rotationX + rotationIndicatorWidth / 2, rotationY + 20);
+            ctx.font = 'bold 12px Arial';
+            const omegaRatio = omega / omega_earth;
+            const ratioText = omegaRatio < 0.1 ? omegaRatio.toFixed(2) : omegaRatio.toFixed(1);
+            ctx.fillText(`${ratioText}× Earth`, rotationX + rotationIndicatorWidth / 2, rotationY + 18);
         }
 
         // Update omega value
         function updateOmega(newOmega) {
-            // Convert slider value (0-500) to omega
-            // 100 = Earth's actual omega
-            omega = (newOmega / 100) * omega_earth;
+            // Calculate critical omega for current latitude
+            const phi = toRadians(latitude);
+            const cosPhi = Math.cos(phi);
 
-            // For values > 300, show critical region
-            if (newOmega > 300) {
-                const phi = toRadians(latitude);
-                const criticalOmega = Math.sqrt(g_true / (R * Math.cos(phi) * Math.cos(phi)));
-                omega = criticalOmega * (newOmega - 300) / 200;
+            // At poles (cos = 0), critical omega is infinity, so cap it
+            let criticalOmega;
+            if (cosPhi < 0.01) {
+                criticalOmega = 0.002; // Cap for near-polar latitudes
+            } else {
+                criticalOmega = Math.sqrt(g_true / (R * cosPhi * cosPhi));
             }
+
+            // Slider 0-500 maps to 0 to 1.1 × critical omega
+            // 0 = no rotation
+            // ~100 = Earth's actual (~17× less than critical at equator)
+            // 500 = 1.1 × critical omega (just past zero gravity)
+            const maxOmega = criticalOmega * 1.1;
+            omega = (newOmega / 500) * maxOmega;
 
             omegaValue.textContent = `${omega.toExponential(2)} rad/s`;
             currentOmegaElem.textContent = `${omega.toExponential(2)} rad/s`;
@@ -883,29 +920,31 @@
             }
 
             // Check if at poles
-            if (latitude === 90) {
-                alert('At 90° latitude (poles), apparent gravity cannot become zero from rotation alone! cos²(90°) = 0');
+            if (latitude >= 89) {
+                alert('At or near 90° latitude (poles), apparent gravity cannot become zero from rotation alone! cos²(90°) ≈ 0');
                 return;
             }
 
             isAutoFinding = true;
             playBtn.textContent = "Stop";
 
-            const phi = toRadians(latitude);
-            const criticalOmega = Math.sqrt(g_true / (R * Math.cos(phi) * Math.cos(phi)));
-
-            let currentOmega = omega;
-            const step = (criticalOmega - currentOmega) / 100;
+            // Target slider value: 454 maps to ~critical omega (500 * (1/1.1) ≈ 454)
+            const targetSliderValue = 454;
+            const currentSliderValue = parseInt(omegaSlider.value);
+            const step = (targetSliderValue - currentSliderValue) / 60;
             let stepCount = 0;
 
             function animateToCritical() {
-                if (stepCount < 100 && isAutoFinding) {
-                    currentOmega += step;
-                    updateOmega((currentOmega / omega_earth) * 100);
-                    omegaSlider.value = (currentOmega / omega_earth) * 100;
+                if (stepCount < 60 && isAutoFinding) {
+                    const newValue = Math.round(currentSliderValue + step * stepCount);
+                    omegaSlider.value = newValue;
+                    updateOmega(newValue);
                     stepCount++;
                     animationId = requestAnimationFrame(animateToCritical);
                 } else {
+                    // Set exactly to critical
+                    omegaSlider.value = targetSliderValue;
+                    updateOmega(targetSliderValue);
                     isAutoFinding = false;
                     playBtn.textContent = "Auto-Find Critical ω";
                 }
@@ -916,10 +955,12 @@
 
         // Reset to Earth's actual values
         function resetSimulation() {
-            omegaSlider.value = 100; // Earth's actual omega
-            latitudeSlider.value = 60;
-            updateOmega(100);
-            updateLatitude(60);
+            // Earth's omega is ~17× less than critical at equator
+            // Slider 500 = 1.1 × critical, so Earth's = 500 / (17 * 1.1) ≈ 27
+            omegaSlider.value = 27;
+            latitudeSlider.value = 0; // Start at equator for clearer demo
+            updateOmega(27);
+            updateLatitude(0);
 
             if (isAutoFinding) {
                 isAutoFinding = false;
