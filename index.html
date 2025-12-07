@@ -215,23 +215,50 @@
             font-size: 0.9rem;
         }
 
-        .footer-links {
+        .footer-nav {
             display: flex;
-            flex-wrap: wrap;
+            align-items: center;
             justify-content: center;
-            gap: 1rem 1.5rem;
+            gap: 1rem;
             margin-bottom: 1rem;
-            max-width: 100%;
-            padding: 0 1rem;
         }
 
-        .footer-links a {
+        .footer-nav label {
             color: var(--accent-cyan);
-            text-decoration: none;
+            font-weight: 600;
         }
 
-        .footer-links a:hover {
-            text-decoration: underline;
+        .simulation-dropdown {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 8px;
+            cursor: pointer;
+            outline: none;
+            min-width: 280px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2322d3ee' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+        }
+
+        .simulation-dropdown:hover {
+            border-color: #67e8f9;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
+        }
+
+        .simulation-dropdown:focus {
+            border-color: #67e8f9;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+        }
+
+        .simulation-dropdown option {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 0.5rem;
         }
 
         @media (max-width: 768px) {
@@ -794,31 +821,36 @@
     </div>
 
     <footer>
-        <div class="footer-links">
-            <a href="gravity-simulation/index.html">Simulation 1</a>
-            <a href="water-drops-simulation/index.html">Simulation 2</a>
-            <a href="satellite-simulation/index.html">Simulation 3</a>
-            <a href="coriolis-simulation/index.html">Simulation 4</a>
-            <a href="freefall-simulation/index.html">Simulation 5</a>
-            <a href="forcelaw-simulation/index.html">Simulation 6</a>
-            <a href="ke-simulation/index.html">Simulation 7</a>
-            <a href="kepler-simulation/index.html">Simulation 8</a>
-            <a href="stones-simulation/index.html">Simulation 9</a>
-            <a href="ascent-simulation/index.html">Simulation 10</a>
-            <a href="wastage-simulation/index.html">Simulation 11</a>
-            <a href="dualball-simulation/index.html">Simulation 12</a>
-            <a href="retrograde-simulation/index.html">Simulation 13</a>
-            <a href="stonethrow-simulation/index.html">Simulation 14</a>
-            <a href="orbitalspeed-simulation/index.html">Simulation 15</a>
-            <a href="airresist-simulation/index.html">Simulation 16</a>
-            <a href="twopass-simulation/index.html">Simulation 17</a>
-            <a href="satmass-simulation/index.html">Simulation 18</a>
-            <a href="wavespeed-simulation/index.html">Simulation 19</a>
-            <a href="keratio-simulation/index.html">Simulation 20</a>
-            <a href="halfesc-simulation/index.html">Simulation 21</a>
-            <a href="rotation-simulation/index.html">Simulation 22</a>
-            <a href="maxheight-simulation/index.html">Simulation 23</a>
-            <a href="zerograv-simulation/index.html">Simulation 24</a>
+        <div class="footer-nav">
+            <label for="simulation-select">🚀 Quick Jump:</label>
+            <select id="simulation-select" class="simulation-dropdown"
+                onchange="if(this.value) window.location.href=this.value;">
+                <option value="">-- Select Simulation --</option>
+                <option value="gravity-simulation/index.html">1. Gravity on Different Planets</option>
+                <option value="water-drops-simulation/index.html">2. Water Drops Free Fall</option>
+                <option value="satellite-simulation/index.html">3. Satellite Orbital Speed</option>
+                <option value="coriolis-simulation/index.html">4. Coriolis Effect</option>
+                <option value="freefall-simulation/index.html">5. Free Fall Motion</option>
+                <option value="forcelaw-simulation/index.html">6. Force Law Visualization</option>
+                <option value="ke-simulation/index.html">7. Kinetic Energy</option>
+                <option value="kepler-simulation/index.html">8. Kepler's Laws</option>
+                <option value="stones-simulation/index.html">9. Falling Stones</option>
+                <option value="ascent-simulation/index.html">10. Ascent Motion</option>
+                <option value="wastage-simulation/index.html">11. Energy Wastage</option>
+                <option value="dualball-simulation/index.html">12. Dual Ball Drop</option>
+                <option value="retrograde-simulation/index.html">13. Retrograde Motion</option>
+                <option value="stonethrow-simulation/index.html">14. Stone Throw</option>
+                <option value="orbitalspeed-simulation/index.html">15. Orbital Speed</option>
+                <option value="airresist-simulation/index.html">16. Air Resistance</option>
+                <option value="twopass-simulation/index.html">17. Two-Pass Motion</option>
+                <option value="satmass-simulation/index.html">18. Satellite Mass</option>
+                <option value="wavespeed-simulation/index.html">19. Wave Speed</option>
+                <option value="keratio-simulation/index.html">20. KE Ratio at Apex</option>
+                <option value="halfesc-simulation/index.html">21. Half Escape Velocity</option>
+                <option value="rotation-simulation/index.html">22. Earth Rotation & g</option>
+                <option value="maxheight-simulation/index.html">23. Maximum Height</option>
+                <option value="zerograv-simulation/index.html">24. Zero Gravity Rotation</option>
+            </select>
         </div>
         <p>Physics Education Simulations | Gravitation Chapter</p>
     </footer>
