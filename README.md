@@ -27,6 +27,6 @@ uv run app.py
 ```
 
 git add .
-git commit -m "Gravitation Problem 16 added"
+git commit -m "Gravitation - Add Satellite Mass vs Orbital Speed"
 git push -u origin main
 git status

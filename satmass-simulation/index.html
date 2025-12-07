@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satellite Mass vs. Orbital Speed - Physics Animation</title>
+    <meta name="description"
+        content="Two satellites with different masses in the same orbit - orbital speed is mass-independent">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <a href="../index.html" class="menu-btn">← Main Menu</a>
+            <h1>🛰️ Satellite Mass vs. Orbital Speed</h1>
+            <p class="subtitle">Two satellites (A and B) in same orbit | Mass of B = 2 × Mass of A | Compare orbital
+                speeds</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Animation Panel -->
+            <div class="animation-panel">
+                <div class="animation-area" id="animation-area">
+                    <div class="stars"></div>
+                    <div class="earth" id="earth">
+                        <div class="earth-glow"></div>
+                    </div>
+                    <div class="orbit-path" id="orbit-path"></div>
+                    <div class="satellite satellite-a" id="satellite-a">
+                        <span class="sat-label">A (m)</span>
+                    </div>
+                    <div class="satellite satellite-b" id="satellite-b">
+                        <span class="sat-label">B (2m)</span>
+                    </div>
+                    <div class="velocity-vector vector-a" id="velocity-a"></div>
+                    <div class="velocity-vector vector-b" id="velocity-b"></div>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls">
+                    <button id="play-btn" class="control-btn primary">
+                        <span class="icon">▶</span> Start Orbit
+                    </button>
+                    <button id="pause-btn" class="control-btn" disabled>
+                        <span class="icon">⏸</span> Pause
+                    </button>
+                    <button id="reset-btn" class="control-btn">
+                        <span class="icon">↺</span> Reset
+                    </button>
+                </div>
+
+                <!-- Mass Ratio Display -->
+                <div class="mass-ratio-panel">
+                    <div class="mass-item">
+                        <div class="mass-circle satellite-a-color"></div>
+                        <div class="mass-info">
+                            <span class="mass-label">Satellite A</span>
+                            <span class="mass-value" id="mass-a">m</span>
+                        </div>
+                    </div>
+                    <div class="mass-relation">=</div>
+                    <div class="mass-item">
+                        <span class="mass-multiplier">½ ×</span>
+                    </div>
+                    <div class="mass-item">
+                        <div class="mass-circle satellite-b-color"></div>
+                        <div class="mass-info">
+                            <span class="mass-label">Satellite B</span>
+                            <span class="mass-value" id="mass-b">2m</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comparison Grid -->
+                <div class="comparison-grid">
+                    <div class="comparison-card satellite-a-border">
+                        <div class="card-header">
+                            <div class="sat-icon satellite-a-color"></div>
+                            <span>Satellite A</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Orbital Speed</span>
+                            <span class="metric-value" id="speed-a">7.66 km/s</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Kinetic Energy</span>
+                            <span class="metric-value" id="energy-a">KE</span>
+                        </div>
+                    </div>
+                    <div class="comparison-card satellite-b-border">
+                        <div class="card-header">
+                            <div class="sat-icon satellite-b-color"></div>
+                            <span>Satellite B</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Orbital Speed</span>
+                            <span class="metric-value" id="speed-b">7.66 km/s</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Kinetic Energy</span>
+                            <span class="metric-value" id="energy-b">2KE</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speed Comparison Highlight -->
+                <div class="speed-highlight">
+                    <div class="highlight-icon">⚡</div>
+                    <div class="highlight-text">
+                        <strong>Both satellites have EQUAL orbital speeds!</strong>
+                        <span>Orbital speed is independent of satellite mass.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Question Box -->
+                <div class="question-box">
+                    <h3>📋 Question</h3>
+                    <p>Consider two satellites A and B. Both move around Earth in the <strong>same orbit</strong>
+                        but the <strong>mass of B is twice that of A</strong>.</p>
+                    <p class="question-highlight">Which of the following statements is correct?</p>
+                </div>
+
+                <!-- Answer Options -->
+                <div class="quiz-panel">
+                    <h3>🎯 Select Answer</h3>
+                    <div class="quiz-options" id="quiz-options">
+                        <button class="quiz-option" data-answer="correct">Orbital speeds of A and B are equal</button>
+                        <button class="quiz-option" data-answer="wrong">Orbital speed of A is twice that of B</button>
+                        <button class="quiz-option" data-answer="wrong">Orbital speed of B is twice that of A</button>
+                        <button class="quiz-option" data-answer="wrong">Kinetic energies of A and B are equal</button>
+                    </div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                </div>
+
+                <!-- Result Box -->
+                <div class="result-box">
+                    <h3>📐 Answer</h3>
+                    <div class="result-display">
+                        <span class="result-label">Orbital speeds:</span>
+                        <span class="result-value success">v_A = v_B (Equal)</span>
+                    </div>
+                    <div class="result-display warning">
+                        <span class="result-label">Kinetic energies:</span>
+                        <span class="result-value">KE_B = 2 × KE_A</span>
+                    </div>
+                </div>
+
+                <!-- Data Panel -->
+                <div class="data-panel">
+                    <h3>📊 Live Data</h3>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Orbit Radius</span>
+                            <span class="data-value" id="radius-value">6871 km</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Angular Position A</span>
+                            <span class="data-value" id="angle-a">0°</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Angular Position B</span>
+                            <span class="data-value" id="angle-b">30°</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Mass Ratio (B/A)</span>
+                            <span class="data-value" id="ratio-value">2</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Panel -->
+            <div class="bottom-panel">
+                <!-- Physics Derivation -->
+                <div class="calc-panel">
+                    <h3>📊 Physics Derivation</h3>
+                    <div class="calc-steps">
+                        <div class="calc-step">
+                            <span class="step-num">1</span>
+                            <span>Gravitational force = Centripetal force</span>
+                            <div class="formula">GMm/r² = mv²/r</div>
+                        </div>
+                        <div class="calc-step">
+                            <span class="step-num">2</span>
+                            <span><strong>Mass (m) cancels out!</strong></span>
+                            <div class="formula">GM/r² = v²/r</div>
+                        </div>
+                        <div class="calc-step highlight">
+                            <span class="step-num">3</span>
+                            <span>Orbital speed formula:</span>
+                            <div class="formula">v = √(GM/r)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Insight -->
+                <div class="insight-panel">
+                    <h3>💡 Key Insight</h3>
+                    <p><strong>Why mass doesn't matter:</strong></p>
+                    <ul class="insight-list">
+                        <li>Heavier objects feel stronger gravity (F ∝ m)</li>
+                        <li>But heavier objects also need more force for same acceleration (F = ma)</li>
+                        <li>These effects cancel out perfectly!</li>
+                    </ul>
+                    <div class="insight-formula">
+                        v = √(GM/r) ← No 'm' in formula!
+                    </div>
+                </div>
+
+                <!-- Energy Comparison -->
+                <div class="energy-panel">
+                    <h3>⚡ Kinetic Energy Comparison</h3>
+                    <div class="energy-comparison">
+                        <div class="energy-item satellite-a-bg">
+                            <span class="energy-formula">KE_A = ½mv²</span>
+                            <span class="energy-result">= KE</span>
+                        </div>
+                        <div class="energy-item satellite-b-bg">
+                            <span class="energy-formula">KE_B = ½(2m)v²</span>
+                            <span class="energy-result">= 2KE</span>
+                        </div>
+                    </div>
+                    <p class="energy-note">Since v is same but m_B = 2m_A, kinetic energy of B is twice that of A.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>Satellite Mass vs. Orbital Speed | Answer: Orbital speeds are equal (v ∝ √(GM/r))</p>
+        </footer>
+    </div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
