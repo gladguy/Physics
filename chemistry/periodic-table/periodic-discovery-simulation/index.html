@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Periodic Table Discovery: Newlands' Octaves & Meyer's Curve</title>
+    <meta name="description"
+        content="Interactive educational visualization teaching both Newlands' Law of Octaves and Lothar Meyer's Atomic Volume Curve">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <nav class="breadcrumb">
+                <a href="../../../index.html">Home</a>
+                <span>›</span>
+                <a href="../../index.html">Chemistry</a>
+                <span>›</span>
+                <a href="../index.html">Periodic Table</a>
+                <span>›</span>
+                <span>Periodic Table Discovery</span>
+            </nav>
+            <h1>🎵 The Musical Discovery of Elements 🎵</h1>
+            <p class="subtitle">Newlands' Octaves & Meyer's Curve - Two Paths to Periodicity</p>
+        </header>
+
+        <!-- Scientists Introduction -->
+        <section class="scientists-intro">
+            <div class="scientist-card newlands">
+                <div class="scientist-icon">🎹</div>
+                <h3>John Newlands (1864)</h3>
+                <p class="scientist-quote">"Law of Octaves"</p>
+                <p>When arranged by atomic mass, every 8th element has similar properties - just like musical notes!</p>
+            </div>
+            <div class="vs-badge">VS</div>
+            <div class="scientist-card meyer">
+                <div class="scientist-icon">📈</div>
+                <h3>Lothar Meyer (1869)</h3>
+                <p class="scientist-quote">"Atomic Volume Curve"</p>
+                <p>Physical properties like atomic volume show periodic patterns when plotted against atomic mass!</p>
+            </div>
+        </section>
+
+        <div class="discovery-note">
+            <span class="note-icon">💡</span>
+            <p>Both scientists independently discovered periodicity, paving the way for Mendeleev's Periodic Table!</p>
+        </div>
+
+        <!-- Main Visualization Area -->
+        <main class="main-content">
+            <!-- Left Panel: Newlands' Octaves -->
+            <div class="visualization-panel newlands-panel">
+                <div class="panel-header">
+                    <h2>🎵 Newlands' Law of Octaves</h2>
+                    <p>Elements arranged like a musical scale</p>
+                </div>
+                <div id="newlandsContainer" class="chart-container"></div>
+                <div class="panel-insight">
+                    <span class="insight-icon">🎯</span>
+                    <p>Every 8th element resembles the 1st, just like musical octaves!</p>
+                </div>
+            </div>
+
+            <!-- Right Panel: Meyer's Curve -->
+            <div class="visualization-panel meyer-panel">
+                <div class="panel-header">
+                    <h2>📈 Meyer's Atomic Volume Curve</h2>
+                    <p>Periodic patterns in physical properties</p>
+                </div>
+                <div id="meyerContainer" class="chart-container"></div>
+                <div class="panel-insight">
+                    <span class="insight-icon">🎯</span>
+                    <p>Peaks at alkali metals show periodicity in physical properties!</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Historical Timeline -->
+        <section class="timeline-section">
+            <h2>📅 Historical Timeline of Periodic Table Discovery</h2>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="event-year">1864</div>
+                    <div class="event-content">
+                        <h3>🎵 Newlands' Law of Octaves</h3>
+                        <p>John Newlands arranges elements by atomic mass and notices every 8th element has similar
+                            properties!</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-year">1869</div>
+                    <div class="event-content">
+                        <h3>📈 Meyer's Atomic Volume Curve</h3>
+                        <p>Lothar Meyer plots atomic volume vs atomic mass and discovers periodic patterns!</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-year">1869</div>
+                    <div class="event-content">
+                        <h3>🧪 Mendeleev's Periodic Table</h3>
+                        <p>Dmitri Mendeleev publishes his periodic table, leaving gaps for undiscovered elements!</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-year">1913</div>
+                    <div class="event-content">
+                        <h3>⚛️ Modern Periodic Table</h3>
+                        <p>Henry Moseley arranges elements by atomic number, creating the modern periodic table!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Comparison -->
+        <section class="comparison-section">
+            <h2>🔍 Compare the Two Approaches</h2>
+            <div class="comparison-grid">
+                <div class="comparison-item">
+                    <h3>Newlands' Method</h3>
+                    <ul>
+                        <li>📋 Arranged elements by atomic mass</li>
+                        <li>🎵 Used musical analogy (octaves)</li>
+                        <li>🔢 Found pattern every 8 elements</li>
+                        <li>⚠️ Broke down for heavier elements</li>
+                        <li>❌ Initially ridiculed by scientists</li>
+                    </ul>
+                </div>
+                <div class="comparison-item">
+                    <h3>Meyer's Method</h3>
+                    <ul>
+                        <li>📊 Plotted physical properties</li>
+                        <li>📈 Created graphical visualization</li>
+                        <li>⛰️ Identified peaks at alkali metals</li>
+                        <li>✓ More convincing evidence</li>
+                        <li>✅ Published same year as Mendeleev</li>
+                    </ul>
+                </div>
+                <div class="comparison-item shared">
+                    <h3>What They Shared</h3>
+                    <ul>
+                        <li>💡 Both discovered periodicity</li>
+                        <li>⚖️ Both used atomic mass</li>
+                        <li>🔄 Both found repeating patterns</li>
+                        <li>🏆 Both contributed to chemistry</li>
+                        <li>📚 Both influenced Mendeleev</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="quiz-section">
+            <h2>🧪 Test Your Knowledge!</h2>
+            <div class="quiz-container">
+                <div class="quiz-question" id="question1">
+                    <p><strong>Question 1:</strong> According to Newlands' Law of Octaves, how many elements separate
+                        elements with similar properties?</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="correct">7 elements (8th element is similar)</button>
+                        <button class="quiz-option" data-answer="wrong">5 elements</button>
+                        <button class="quiz-option" data-answer="wrong">10 elements</button>
+                        <button class="quiz-option" data-answer="wrong">3 elements</button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="question2">
+                    <p><strong>Question 2:</strong> What did Lothar Meyer discover when he plotted atomic volume against
+                        atomic mass?</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">A straight line</button>
+                        <button class="quiz-option" data-answer="correct">A periodic curve with peaks at alkali
+                            metals</button>
+                        <button class="quiz-option" data-answer="wrong">No pattern at all</button>
+                        <button class="quiz-option" data-answer="wrong">Random scatter plot</button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="question3">
+                    <p><strong>Question 3:</strong> Why was Newlands' work initially rejected by the scientific
+                        community?</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">It was mathematically incorrect</button>
+                        <button class="quiz-option" data-answer="wrong">He used wrong atomic masses</button>
+                        <button class="quiz-option" data-answer="correct">The musical analogy seemed fanciful and
+                            pattern broke for heavier elements</button>
+                        <button class="quiz-option" data-answer="wrong">Meyer had already published it</button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="question4">
+                    <p><strong>Question 4:</strong> Which elements appear at the peaks of Meyer's curve?</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">Noble gases (He, Ne, Ar)</button>
+                        <button class="quiz-option" data-answer="wrong">Transition metals (Fe, Co, Ni)</button>
+                        <button class="quiz-option" data-answer="correct">Alkali metals (Li, Na, K, Rb, Cs)</button>
+                        <button class="quiz-option" data-answer="wrong">Halogens (F, Cl, Br)</button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <div class="quiz-score" id="quizScore">
+                <p>Score: <span id="scoreValue">0</span> / 4</p>
+            </div>
+        </section>
+
+        <!-- Key Takeaways -->
+        <section class="takeaways-section">
+            <h2>📝 Key Takeaways</h2>
+            <div class="takeaways-grid">
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">🎵</div>
+                    <h3>Music in Science</h3>
+                    <p>Newlands' musical analogy showed that patterns in nature can be found in unexpected ways.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">📈</div>
+                    <h3>Visual Proof</h3>
+                    <p>Meyer's graphical approach provided convincing visual evidence of periodicity.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">🤝</div>
+                    <h3>Collaboration</h3>
+                    <p>Scientific progress often comes from multiple scientists working independently on the same
+                        problem.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">🔬</div>
+                    <h3>Foundation</h3>
+                    <p>Both discoveries laid the groundwork for Mendeleev's famous periodic table.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Periodic Table Discovery Visualization | Chemistry Education</p>
+            <p class="footer-note">Learn how science builds upon the discoveries of many brilliant minds!</p>
+        </footer>
+    </div>
+
+    <!-- Tooltips -->
+    <div class="tooltip octave-tooltip"></div>
+    <div class="tooltip meyer-tooltip"></div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>

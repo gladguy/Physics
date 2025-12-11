@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry - Interactive Simulations</title>
+    <meta name="description" content="Interactive chemistry simulations for learning atomic and molecular concepts">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-primary: #0a0f1c;
+            --bg-card: rgba(20, 30, 50, 0.8);
+            --accent-gold: #ffd700;
+            --accent-cyan: #00d4ff;
+            --accent-green: #00e676;
+            --accent-orange: #ff9f1c;
+            --accent-purple: #a855f7;
+            --accent-pink: #ec4899;
+            --text-primary: #ffffff;
+            --text-secondary: #a0b0c0;
+            --border-color: rgba(100, 150, 200, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            background-image:
+                radial-gradient(ellipse at 20% 30%, rgba(168, 85, 247, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 70%, rgba(236, 72, 153, 0.08) 0%, transparent 40%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* Molecule pattern background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(2px 2px at 100px 100px, rgba(168, 85, 247, 0.3), transparent),
+                radial-gradient(2px 2px at 200px 150px, rgba(236, 72, 153, 0.25), transparent),
+                radial-gradient(1px 1px at 300px 200px, white, transparent),
+                radial-gradient(2px 2px at 150px 300px, rgba(168, 85, 247, 0.3), transparent),
+                radial-gradient(1px 1px at 400px 100px, rgba(255, 255, 255, 0.5), transparent);
+            background-size: 500px 400px;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-cyan);
+            text-decoration: none;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--accent-gold);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .chapter-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: #fff;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .topic-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 40px rgba(168, 85, 247, 0.2);
+        }
+
+        .card-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .card-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(168, 85, 247, 0.2);
+            color: var(--accent-purple);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .launch-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            color: #fff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .topic-card:hover .launch-btn {
+            transform: scale(1.02);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="back-link">← Back to All Topics</a>
+            <div class="chapter-badge">🧪 Subject</div>
+            <h1>Chemistry</h1>
+            <p class="subtitle">Interactive Atomic & Molecular Simulations</p>
+        </header>
+
+        <div class="topics-grid">
+            <!-- Periodic Table Topic -->
+            <a href="periodic-table/index.html" class="topic-card">
+                <div class="card-icon">⚛️</div>
+                <h2 class="card-title">Periodic Table</h2>
+                <p class="card-description">
+                    Explore the organization of elements, periodic trends, and the historical
+                    development of the periodic table through interactive visualizations.
+                </p>
+                <span class="card-count">📊 1 Simulation</span>
+                <div class="launch-btn">
+                    <span>▶</span> Explore Topic
+                </div>
+            </a>
+
+            <!-- Future Topics (Placeholder) -->
+            <div class="topic-card" style="opacity: 0.5; cursor: not-allowed;">
+                <div class="card-icon">🔬</div>
+                <h2 class="card-title">Chemical Bonding</h2>
+                <p class="card-description">
+                    Coming soon: Visualize ionic, covalent, and metallic bonds with
+                    interactive molecular models.
+                </p>
+                <span class="card-count">🔜 Coming Soon</span>
+            </div>
+
+            <div class="topic-card" style="opacity: 0.5; cursor: not-allowed;">
+                <div class="card-icon">⚗️</div>
+                <h2 class="card-title">Chemical Reactions</h2>
+                <p class="card-description">
+                    Coming soon: Explore reaction rates, equilibrium, and
+                    thermodynamics through simulations.
+                </p>
+                <span class="card-count">🔜 Coming Soon</span>
+            </div>
+        </div>
+
+        <footer>
+            <p>Chemistry Education Simulations | Interactive Learning</p>
+        </footer>
+    </div>
+</body>
+
+</html>

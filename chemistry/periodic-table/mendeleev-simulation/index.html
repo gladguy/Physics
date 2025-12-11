@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Mendeleev's Periodic Table - The Genius of Prediction</title>
+    <meta name="description"
+        content="Interactive educational visualization teaching Mendeleev's groundbreaking contribution: organizing elements by atomic mass and predicting undiscovered elements">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <nav class="breadcrumb">
+                <a href="../../../index.html">Home</a>
+                <span>›</span>
+                <a href="../../index.html">Chemistry</a>
+                <span>›</span>
+                <a href="../index.html">Periodic Table</a>
+                <span>›</span>
+                <span>Mendeleev's Table</span>
+            </nav>
+            <h1>🧪 Dmitri Mendeleev's Periodic Table (1869)</h1>
+            <p class="subtitle">The Genius Who Predicted Undiscovered Elements!</p>
+        </header>
+
+        <!-- Educational Header -->
+        <section class="educational-header">
+            <div class="scientist-profile">
+                <div class="scientist-image">
+                    <div class="image-placeholder">👨‍🔬</div>
+                </div>
+                <div class="scientist-info">
+                    <h2>📜 Mendeleev's Periodic Law:</h2>
+                    <blockquote>
+                        "Properties of elements are periodic functions of their atomic weights"
+                    </blockquote>
+                    <div class="key-innovations">
+                        <h3>🌟 Revolutionary Ideas:</h3>
+                        <ul>
+                            <li>✅ Arranged elements by increasing atomic mass</li>
+                            <li>✅ Left gaps for undiscovered elements</li>
+                            <li>✅ Predicted properties of missing elements</li>
+                            <li>✅ Grouped elements with similar properties</li>
+                            <li>✅ Corrected atomic masses when needed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="discovery-note">
+            <span class="note-icon">💡</span>
+            <p>Mendeleev's genius wasn't just organizing known elements—he predicted unknown ones!</p>
+        </div>
+
+        <!-- Main Visualization Area -->
+        <main class="main-content">
+            <!-- Left Panel: Mendeleev's Table -->
+            <div class="visualization-panel mendeleev-panel">
+                <div class="panel-header">
+                    <h2>🧪 Mendeleev's Original Table (1869)</h2>
+                    <p>8 groups arranged by atomic mass</p>
+                </div>
+                <div id="mendeleevContainer" class="chart-container"></div>
+                <div class="panel-insight">
+                    <span class="insight-icon">🎯</span>
+                    <p>Golden boxes with "?" show gaps Mendeleev left for undiscovered elements!</p>
+                </div>
+            </div>
+
+            <!-- Right Panel: Modern Comparison -->
+            <div class="visualization-panel modern-panel">
+                <div class="panel-header">
+                    <h2>🔄 Modern Periodic Table Comparison</h2>
+                    <p>How Mendeleev's table evolved</p>
+                </div>
+                <div id="modernContainer" class="modern-container"></div>
+            </div>
+        </main>
+
+        <!-- Predictions Panel -->
+        <section class="predictions-section">
+            <h2>🔮 Mendeleev's Amazing Predictions</h2>
+            <p class="section-subtitle">He accurately predicted properties of undiscovered elements!</p>
+            <div id="predictionsContainer" class="predictions-container"></div>
+
+            <div class="prediction-impact">
+                <h3>🎯 Why Were These Predictions So Important?</h3>
+                <ul>
+                    <li>✅ Proved the periodic law was valid</li>
+                    <li>✅ Showed science could make accurate predictions</li>
+                    <li>✅ Convinced other scientists to accept the periodic table</li>
+                    <li>✅ Demonstrated the power of pattern recognition in science</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Historical Timeline -->
+        <section class="timeline-section">
+            <h2>📅 The Evolution of the Periodic Table</h2>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="event-year">1864</div>
+                    <div class="event-content">
+                        <h3>🎵 Newlands' Law of Octaves</h3>
+                        <p>Noticed every 8th element had similar properties when arranged by atomic mass</p>
+                    </div>
+                </div>
+                <div class="timeline-event highlight">
+                    <div class="event-year">1869</div>
+                    <div class="event-content">
+                        <h3>🧪 Mendeleev's Breakthrough</h3>
+                        <p>Published first periodic table with gaps for undiscovered elements</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-year">1875</div>
+                    <div class="event-content">
+                        <h3>🔬 Gallium Discovered</h3>
+                        <p>First of Mendeleev's predicted elements found - matched his predictions perfectly!</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-year">1886</div>
+                    <div class="event-content">
+                        <h3>💎 Germanium Discovered</h3>
+                        <p>Another predicted element found - further proof of Mendeleev's genius</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-year">1894-98</div>
+                    <div class="event-content">
+                        <h3>🎈 Noble Gases Discovered</h3>
+                        <p>Helium, neon, argon, krypton, xenon discovered - added as new group</p>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="event-year">1913</div>
+                    <div class="event-content">
+                        <h3>⚛️ Moseley's Atomic Numbers</h3>
+                        <p>Showed elements should be arranged by proton count, not atomic mass</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Quiz -->
+        <section class="quiz-section">
+            <h2>🧪 Test Your Mendeleev Knowledge!</h2>
+            <div class="quiz-container">
+                <div class="quiz-question" id="question1">
+                    <p><strong>Question 1:</strong> What was Mendeleev's most revolutionary idea that other scientists
+                        hadn't considered?</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="correct">Leaving gaps for undiscovered
+                            elements</button>
+                        <button class="quiz-option" data-answer="wrong">Arranging elements by atomic mass</button>
+                        <button class="quiz-option" data-answer="wrong">Using chemical symbols</button>
+                        <button class="quiz-option" data-answer="wrong">Drawing a table format</button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="question2">
+                    <p><strong>Question 2:</strong> Which element was the first successful prediction by Mendeleev?</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">Germanium (Ge)</button>
+                        <button class="quiz-option" data-answer="correct">Gallium (Ga)</button>
+                        <button class="quiz-option" data-answer="wrong">Scandium (Sc)</button>
+                        <button class="quiz-option" data-answer="wrong">Helium (He)</button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+
+                <div class="quiz-question" id="question3">
+                    <p><strong>Question 3:</strong> What problem did Mendeleev's table have that was later fixed in the
+                        modern periodic table?</p>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="wrong">It had too many gaps</button>
+                        <button class="quiz-option" data-answer="wrong">It didn't include gases</button>
+                        <button class="quiz-option" data-answer="correct">Some elements were out of order (Ar/K,
+                            Co/Ni)</button>
+                        <button class="quiz-option" data-answer="wrong">It didn't show chemical properties</button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+            </div>
+
+            <div class="quiz-score" id="quizScore">
+                <p>Score: <span id="scoreValue">0</span> / 3</p>
+            </div>
+        </section>
+
+        <!-- Fun Facts -->
+        <section class="fun-facts-section">
+            <h2>🎯 Fun Facts About Mendeleev</h2>
+            <div class="fun-facts-grid">
+                <div class="fact-card">
+                    <span class="fact-icon">📚</span>
+                    <p>He wrote the principles of chemistry while on a train journey!</p>
+                </div>
+                <div class="fact-card">
+                    <span class="fact-icon">🧠</span>
+                    <p>He played solitaire with element cards to discover the pattern!</p>
+                </div>
+                <div class="fact-card">
+                    <span class="fact-icon">🏆</span>
+                    <p>He was nominated for the Nobel Prize three times but never won!</p>
+                </div>
+                <div class="fact-card">
+                    <span class="fact-icon">🛌</span>
+                    <p>He reportedly saw the complete table in a dream!</p>
+                </div>
+                <div class="fact-card">
+                    <span class="fact-icon">🎓</span>
+                    <p>He was a passionate teacher who believed in making science accessible!</p>
+                </div>
+                <div class="fact-card">
+                    <span class="fact-icon">⚗️</span>
+                    <p>Element 101 (Mendelevium) is named after him!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Takeaways -->
+        <section class="takeaways-section">
+            <h2>📝 Key Takeaways</h2>
+            <div class="takeaways-grid">
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">🔮</div>
+                    <h3>Predictive Power</h3>
+                    <p>Mendeleev's table could predict properties of undiscovered elements with remarkable accuracy.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">📊</div>
+                    <h3>Pattern Recognition</h3>
+                    <p>By arranging elements by atomic mass, periodic patterns in properties became visible.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">🧩</div>
+                    <h3>Scientific Courage</h3>
+                    <p>He had the courage to leave gaps where others would have squeezed elements incorrectly.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="takeaway-icon">🔬</div>
+                    <h3>Foundation of Chemistry</h3>
+                    <p>His table became the foundation for our modern understanding of chemistry.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Mendeleev's Periodic Table Visualization | Chemistry Education</p>
+            <p class="footer-note">"The genius who saw what others couldn't - the pattern in nature's elements!"</p>
+        </footer>
+    </div>
+
+    <!-- Tooltips -->
+    <div class="tooltip element-tooltip"></div>
+    <div class="tooltip gap-tooltip"></div>
+
+    <script src="simulation.js"></script>
+</body>
+
+</html>
